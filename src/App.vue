@@ -1,32 +1,27 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
+    <zr-header v-if="userInfo" />
+    <router-view />
+    <zr-nav  v-if="userInfo" />
   </div>
 </template>
-
-<style lang="less">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
-#nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
+<script>
+import zrHeader from './components/common/header'
+import zrNav from './components/common/nav'
+export default {
+  data () {
+    return {
+      userInfo: false
     }
+  },
+  components: {
+    zrHeader,
+    zrNav
   }
 }
+</script>
+
+<style lang="less">
+@import url('./assets/css/default.less');
+@import url('./assets/css/iconfont.css');
 </style>
