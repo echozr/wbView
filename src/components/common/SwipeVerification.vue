@@ -17,7 +17,7 @@
     <div class="sliding-validation-top">
       <p>请完成安全验证</p>
       <i class="iconfont" @click="handleReload()">&#xe68c;</i>
-      <i class="iconfont" @click="handleClose()">&#xe607;</i>
+      <!-- <i class="iconfont" @click="handleClose()">&#xe607;</i> -->
     </div>
     <div
       class="sliding-validation-image-wrapper"

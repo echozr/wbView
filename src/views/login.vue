@@ -58,14 +58,17 @@
         </li>
       </ul>
     </div>
+     <!-- loading -->
+    <zr-loading v-show="loading" />
     <!-- 图片验证组件 -->
     <SwipeVerification :showSlidingValidation="showSlidingValidation" @handleSlidingValidation="handleSlidingValidation" />
   </div>
 </template>
 
 <script>
-import { Button, Field, Toast, Form } from 'vant'
+import { Button, Field, Toast, Form, Notify } from 'vant'
 import { ValidationProvider, ValidationObserver } from 'vee-validate'
+import zrLoading from '../components/common/loading'
 import SwipeVerification from '../components/common/SwipeVerification'
 // import axios from 'axios'
 export default {
@@ -73,9 +76,10 @@ export default {
   data () {
     return {
       user: {
-        userName: '12433541',
-        password: 'ASas123'
+        userName: 'fanruoruo',
+        password: 'Aa123456'
       },
+      loading: false,
       showSlidingValidation: false,
       EquipmentType: true
     }
@@ -85,6 +89,7 @@ export default {
     [Field.name]: Field,
     [Toast.name]: Toast,
     [Form.name]: Form,
+    zrLoading,
     ValidationProvider,
     ValidationObserver,
     SwipeVerification
@@ -96,14 +101,23 @@ export default {
         this.showSlidingValidation = true
       }
     },
-    handleSlidingValidation (params) {
+    async handleSlidingValidation (params) {
       const { type, msg } = params
-      console.log(type, msg)
       if (msg === '验证成功') {
+        debugger
+        this.loading = true
         this.showSlidingValidation = type
-        this.$axios.user.login(this.user).then(({ data, status }) => {
-          console.log(data, status)
-        })
+        const { data, status } = await this.$axios.user.login(this.user)
+        this.loading = false
+        if (status === 200 && data) {
+          if (data.code === 200) {
+            setTimeout(() => {
+              this.$router.push({ path: '/resetPassword' })
+            }, 500)
+          } else {
+            Notify({ type: 'success', message: data.message })
+          }
+        }
       }
     }
   }

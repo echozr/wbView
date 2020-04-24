@@ -12,6 +12,7 @@
   color: #727272;
   box-sizing: border-box;
   margin: 0;
+
   div,
   p,
   i {
@@ -19,38 +20,46 @@
     margin: 0;
     box-sizing: border-box;
   }
+
   .sliding-validation-top {
     display: flex;
     align-items: center;
     height: 16px;
     margin-bottom: 20px;
+
     p {
       margin-right: auto;
       height: 16px;
       line-height: 16px;
       font-size: 16px;
     }
+
     .iconfont {
       font-size: 14px;
       margin-left: 10px;
       cursor: pointer;
     }
+
     .anticon {
       margin-left: 10px;
       cursor: pointer;
     }
   }
+
   .sliding-validation-image-wrapper {
     position: relative;
     overflow: hidden;
+
     canvas {
       display: block;
     }
+
     canvas:nth-of-type(2) {
       position: absolute;
       left: 0;
     }
   }
+
   .sliding-validation-image-wrapper-success::after {
     content: '';
     display: block;
@@ -60,14 +69,13 @@
     position: absolute;
     top: 50px;
     left: -300px;
-    background: linear-gradient(
-      to bottom,
-      rgba(229, 172, 142, 0),
-      rgba(255, 255, 255, 1) 50%,
-      rgba(229, 172, 142, 0)
-    );
+    background: linear-gradient(to bottom,
+        rgba(229, 172, 142, 0),
+        rgba(255, 255, 255, 1) 50%,
+        rgba(229, 172, 142, 0));
     animation: successMove 0.5s ease;
   }
+
   .sliding-validation-image-loading {
     top: 0;
     left: 0;
@@ -76,6 +84,7 @@
     background-color: #f5f5f5;
     z-index: 11;
     position: absolute;
+
     span {
       position: absolute;
       top: 50%;
@@ -89,6 +98,7 @@
       animation: loading 1s linear infinite;
     }
   }
+
   .sliding-validation-image-hint {
     width: 100%;
     height: 30px;
@@ -103,8 +113,8 @@
     z-index: 10;
     font-size: 15px;
   }
-  .sliding-validation-image-hint-success {
-    @extend .sliding-validation-image-hint;
+
+  .sliding-validation-image-hint-success :extend(.sliding-validation-image-hint) {
     background-color: #c5e3fd;
     color: #ffffff;
     height: 30px;
@@ -112,9 +122,11 @@
     padding-left: 10px;
     font-size: 15px;
   }
+
   .block-canvas-restore {
     transition: left 0.5s;
   }
+
   .sliding-validation-image-block {
     width: 280px;
     height: 140px;
@@ -123,17 +135,20 @@
     top: 0;
     left: 0;
   }
+
   .sliding-validation-block-wrapper {
     height: 40px;
     border: 1px solid #d9d9d9;
     margin-top: 20px;
     position: relative;
   }
+
   .sliding-validation-hint {
     text-align: center;
     line-height: 40px;
     font-size: 14px;
   }
+
   .sliding-validation-block {
     position: absolute;
     top: -1px;
@@ -142,38 +157,47 @@
     height: 40px;
     border: 1px solid #d9d9d9;
   }
+
   .sliding-validation-block-active {
     border-color: #1890ff;
     background-color: #d1e9fe;
+
     .sliding-validation-button {
       background-color: #1890ff;
       color: #fff;
     }
   }
+
   .sliding-validation-block-restore {
     border-color: #d9d9d9;
     background-color: #fff;
     transition: width 0.5s;
+
     .sliding-validation-button {
       border-left: 1px solid #d9d9d9;
     }
   }
+
   .sliding-validation-block-success {
     border-color: #52ccba;
     background-color: #d2f4ef;
+
     .sliding-validation-button {
       background-color: #52ccba;
       color: #fff;
     }
   }
+
   .sliding-validation-block-error {
     border-color: #f5222d;
     background-color: #fce1e1;
+
     .sliding-validation-button {
       background-color: #f5222d;
       color: #fff;
     }
   }
+
   .sliding-validation-button {
     display: flex;
     align-items: center;
@@ -187,40 +211,50 @@
     border: none;
     cursor: pointer;
   }
+
   .sliding-validation-button-hover {
     background-color: #1890ff;
     color: #fff;
   }
 }
+
 .sliding-validation-wrapper-error {
   animation: errorMove 0.25s linear 2;
 }
+
 @keyframes errorMove {
   0% {
     transform: translate(-50%, -50%);
   }
+
   25% {
     transform: translate(-48%, -50%);
   }
+
   50% {
     transform: translate(-50%, -50%);
   }
+
   75% {
     transform: translate(-52%, -50%);
   }
+
   100% {
     transform: translate(-50%, -50%);
   }
 }
+
 @keyframes successMove {
   100% {
     left: 200px;
   }
 }
+
 @keyframes loading {
   0% {
     transform: rotate(0);
   }
+
   100% {
     transform: rotate(360deg);
   }

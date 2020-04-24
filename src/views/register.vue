@@ -17,9 +17,10 @@
             label="用户名"
             right-icon="warning-o"
             @click-right-icon="$toast('用户名最小长度为6个字符')"
+            @blur="checkName"
             name="userName"
             placeholder="请输入用户名"
-            :error-message="errors[0]"
+            :error-message="errMsg||errors[0]"
           />
         </ValidationProvider>
         <ValidationProvider rules="required|password" name="password" v-slot="{ errors }">
@@ -34,15 +35,6 @@
             :error-message="errors[0]"
           />
         </ValidationProvider>
-        <van-field
-            v-model="user.newPassword"
-            label="确认密码"
-            type="password"
-            right-icon="warning-o"
-            @click-right-icon="$toast('与密码保持一致')"
-            name="newPassword"
-            placeholder="请再次输入密码"
-            :error-message="errMsg"/>
         <div class='select_warp'>
           <span class="lable">性别</span>
           <van-dropdown-menu>
@@ -57,12 +49,18 @@
         </div>
       </ValidationObserver>
     </div>
+    <!-- loading -->
+    <zr-loading v-show="loading" />
+    <!-- 图片验证组件 -->
+    <SwipeVerification :showSlidingValidation="showSlidingValidation" @handleSlidingValidation="handleSlidingValidation" />
   </div>
 </template>
 
 <script>
-import { Button, Field, Toast, DropdownMenu, DropdownItem } from 'vant'
+import { Button, Field, Toast, DropdownMenu, DropdownItem, Notify } from 'vant'
 import { ValidationProvider, ValidationObserver } from 'vee-validate'
+import zrLoading from '../components/common/loading'
+import SwipeVerification from '../components/common/SwipeVerification'
 export default {
   name: 'register',
   data () {
@@ -70,15 +68,17 @@ export default {
       user: {
         userName: '',
         password: '',
-        newPassword: '',
         gender: 1
       },
+      JudgeName: false,
+      loading: false,
       errMsg: '',
       option1: [
         { text: '男', value: 1 },
         { text: '女', value: 2 },
         { text: '保密', value: 3 }
-      ]
+      ],
+      showSlidingValidation: false
     }
   },
   components: {
@@ -87,26 +87,45 @@ export default {
     [Toast.name]: Toast,
     [DropdownMenu.name]: DropdownMenu,
     [DropdownItem.name]: DropdownItem,
+    zrLoading,
     ValidationProvider,
-    ValidationObserver
+    ValidationObserver,
+    SwipeVerification
   },
   methods: {
-    Validator () {
-      if (this.user.newPassword !== this.user.password) {
-        this.errMsg = '两次密码输入不一致'
-      } else {
-        this.errMsg = ''
+    async checkName () {
+      this.errMsg = ''
+      const { status, data } = await this.$axios.user.isExist({ userName: this.user.userName })
+      if (status === 200 && data) {
+        if (data.code === 10003) {
+          this.JudgeName = true
+        } else {
+          this.errMsg = '用户名已存在'
+        }
       }
     },
     async onSubmit () {
-      this.$refs.form.validate().then(res => {
-        console.log(res)
-        if (res) {
-          // 验证成功
-          this.Validator()
-          console.log('调用登录方法')
+      const res = await this.$refs.form.validate()
+      if (res) {
+        // 验证成功
+        this.showSlidingValidation = true
+      }
+    },
+    async handleSlidingValidation (params) {
+      const { type, msg } = params
+      if (msg === '验证成功' && this.JudgeName) {
+        this.showSlidingValidation = type
+        this.loading = true
+        const { data, status } = await this.$axios.user.register(this.user)
+        this.loading = false
+        if (status === 200 && data) {
+          if (data.code === 200) {
+            Notify({ type: 'success', message: data.data })
+          } else {
+            Notify({ type: 'success', message: data.message })
+          }
         }
-      })
+      }
     }
   }
 }
