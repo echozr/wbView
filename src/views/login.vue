@@ -10,45 +10,74 @@
       />
     </div>
     <div class="form">
-        <ValidationObserver ref="form">
-          <ValidationProvider rules="required|userName" name="userName" v-slot="{ errors }">
-            <van-field v-model="user.userName" label="用户名" right-icon="warning-o" @click-right-icon="$toast('用户名最小长度为6个字符')" name='userName' placeholder="请输入用户名"  :error-message="errors[0]" />
-          </ValidationProvider>
-          <ValidationProvider rules="required|password" name="password" v-slot="{ errors }">
-            <van-field v-model="user.password" label="密码" right-icon="warning-o" @click-right-icon="$toast('密码至少6位包含大写小写及数字')" name="password" type="password"  placeholder="请输入密码" :error-message="errors[0]" />
-          </ValidationProvider>
-          <div style="margin: 16px 0;">
-            <van-button  block type="info"  @click="onSubmit">提交</van-button>
-          </div>
-        </ValidationObserver>
-        <div class="login_info">
-          <router-link class="btn" to="/register">立即注册</router-link>
-          <router-link class="btn" style="margin-left:auto" to="/resetPassword">忘记密码</router-link>
+      <ValidationObserver ref="form">
+        <ValidationProvider rules="required|userName" name="userName" v-slot="{ errors }">
+          <van-field
+            v-model="user.userName"
+            label="用户名"
+            right-icon="warning-o"
+            @click-right-icon="$toast('用户名最小长度为6个字符')"
+            name="userName"
+            placeholder="请输入用户名"
+            :error-message="errors[0]"
+          />
+        </ValidationProvider>
+        <ValidationProvider rules="required|password" name="password" v-slot="{ errors }">
+          <van-field
+            v-model="user.password"
+            label="密码"
+            right-icon="warning-o"
+            @click-right-icon="$toast('密码至少6位包含大写小写及数字')"
+            name="password"
+            type="password"
+            placeholder="请输入密码"
+            :error-message="errors[0]"
+          />
+        </ValidationProvider>
+        <div style="margin: 16px 0;">
+          <van-button block type="info" @click="onSubmit">提交</van-button>
         </div>
+      </ValidationObserver>
+      <div class="login_info">
+        <router-link class="btn" to="/register">立即注册</router-link>
+        <router-link class="btn" style="margin-left:auto" to="/resetPassword">忘记密码</router-link>
+      </div>
     </div>
     <!-- 第三方登录 -->
-    <div class="oauth" >
+    <div class="oauth">
       <div class="text">— 快速登录 —</div>
       <ul class="iconGroup">
-        <li> <span class="iconfont" title="QQ">&#xe6e4;</span></li>
-        <li> <span class="iconfont" title="微信">&#xe65c;</span></li>
-        <li> <span class="iconfont" title="微博">&#xe61f;</span></li>
+        <li>
+          <span class="iconfont" title="QQ">&#xe6e4;</span>
+        </li>
+        <li>
+          <span class="iconfont" title="微信">&#xe65c;</span>
+        </li>
+        <li>
+          <span class="iconfont" title="微博">&#xe61f;</span>
+        </li>
       </ul>
     </div>
+    <!-- 图片验证组件 -->
+    <SwipeVerification :showSlidingValidation="showSlidingValidation" @handleSlidingValidation="handleSlidingValidation" />
   </div>
 </template>
 
 <script>
 import { Button, Field, Toast, Form } from 'vant'
 import { ValidationProvider, ValidationObserver } from 'vee-validate'
+import SwipeVerification from '../components/common/SwipeVerification'
+// import axios from 'axios'
 export default {
   name: 'login',
   data () {
     return {
       user: {
-        userName: '',
-        password: ''
-      }
+        userName: '12433541',
+        password: 'ASas123'
+      },
+      showSlidingValidation: false,
+      EquipmentType: true
     }
   },
   components: {
@@ -57,17 +86,25 @@ export default {
     [Toast.name]: Toast,
     [Form.name]: Form,
     ValidationProvider,
-    ValidationObserver
+    ValidationObserver,
+    SwipeVerification
   },
   methods: {
     async onSubmit () {
-      this.$refs.form.validate().then(res => {
-        console.log(res)
-        if (res) {
-          // 验证成功
-          console.log('调用登录方法')
-        }
-      })
+      const res = await this.$refs.form.validate()
+      if (res) {
+        this.showSlidingValidation = true
+      }
+    },
+    handleSlidingValidation (params) {
+      const { type, msg } = params
+      console.log(type, msg)
+      if (msg === '验证成功') {
+        this.showSlidingValidation = type
+        this.$axios.user.login(this.user).then(({ data, status }) => {
+          console.log(data, status)
+        })
+      }
     }
   }
 }
