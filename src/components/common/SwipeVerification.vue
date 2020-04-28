@@ -271,6 +271,7 @@ export default {
       this.disX = clientX - this.el.offsetLeft
     },
     touchmoveHandle (event) {
+      // console.log(1)
       // 鼠标按下并移动时
       window.addEventListener(this.over, this.mousemoveFun, false)
       // 鼠标弹起时

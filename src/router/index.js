@@ -1,19 +1,32 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Login from '../views/login.vue'
 
 Vue.use(VueRouter)
 
 const routes = [
   {
     path: '/',
+    name: 'home',
+    component: () => import(/* webpackChunkName: "login" */ '../views/home.vue'),
+    meta: {
+      isLogin: true
+    }
+  },
+  {
+    path: '/login',
     name: 'login',
-    component: Login
+    component: () => import(/* webpackChunkName: "login" */ '../views/login.vue'),
+    meta: {
+      isLogin: false
+    }
   },
   {
     path: '/register',
     name: 'register',
-    component: () => import(/* webpackChunkName: "register" */ '../views/register.vue')
+    component: () => import(/* webpackChunkName: "register" */ '../views/register.vue'),
+    meta: {
+      isLogin: false
+    }
   },
   {
     path: '/resetPassword',

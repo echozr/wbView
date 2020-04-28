@@ -70,6 +70,7 @@ import { Button, Field, Toast, Form, Notify } from 'vant'
 import { ValidationProvider, ValidationObserver } from 'vee-validate'
 import zrLoading from '../components/common/loading'
 import SwipeVerification from '../components/common/SwipeVerification'
+import { mapActions } from 'vuex'
 // import axios from 'axios'
 export default {
   name: 'login',
@@ -77,7 +78,7 @@ export default {
     return {
       user: {
         userName: 'fanruoruo',
-        password: 'Aa123456'
+        password: 'Aa111111'
       },
       loading: false,
       showSlidingValidation: false,
@@ -95,6 +96,7 @@ export default {
     SwipeVerification
   },
   methods: {
+    ...mapActions(['setLogin']),
     async onSubmit () {
       const res = await this.$refs.form.validate()
       if (res) {
@@ -111,9 +113,8 @@ export default {
         this.loading = false
         if (status === 200 && data) {
           if (data.code === 200) {
-            setTimeout(() => {
-              this.$router.push({ path: '/resetPassword' })
-            }, 500)
+            this.setLogin({ flag: true, userInfo: data.data.userInfo })
+            this.$router.push({ path: '/' })
           } else {
             Notify({ type: 'success', message: data.message })
           }
