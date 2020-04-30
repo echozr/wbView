@@ -1,12 +1,13 @@
 <template>
   <div>
-    shouye
+    404
   </div>
 </template>
 <script>
 export default {
 }
 </script>
-<style lang="less" scoped>
-
-</style>
+<script>
+export default {
+}
+</script>

@@ -24,11 +24,13 @@ export default {
     // 登录
     setLogin: ({ commit }, data) => {
       localStorage.setItem('isLogin', data.flag)
+      localStorage.setItem('userInfo', JSON.stringify(data.userInfo))
       commit('Login', data)
     },
     // 退出
     setLogout: ({ commit }, data) => {
       localStorage.removeItem('isLogin')
+      localStorage.removeItem('userInfo')
       commit('Logout')
     }
   }

@@ -18,6 +18,10 @@ const user = {
   // 验证用户是否已注册
   isExist (params) {
     return axios.post(`${base.api}/user/isExist`, qs.stringify(params))
+  },
+  // 修改用户信息
+  changeInfo (params) {
+    return axios.post(`${base.api}/user/changeInfo`, qs.stringify(params))
   }
 }
 

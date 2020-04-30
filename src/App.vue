@@ -1,27 +1,36 @@
 <template>
   <div id="app">
-    <zr-header v-if="userInfo" />
-    <router-view />
-    <zr-nav  v-if="userInfo" />
+    <router-view  />
+    <zr-tabbar v-if="!(this.path === '/login' || this.path === '/register')" />
   </div>
 </template>
 <script>
-import zrHeader from './components/common/header'
-import zrNav from './components/common/nav'
+import zrTabbar from './components/common/tabbar'
 export default {
   data () {
     return {
-      userInfo: false
+      path: '',
+      flag: false
+    }
+  },
+  computed: {
+  },
+  mounted () {
+    this.path = this.$route.path
+  },
+  watch: {
+    $route (to, from) {
+      this.path = to.path
+      console.log(this.path)
     }
   },
   components: {
-    zrHeader,
-    zrNav
+    zrTabbar
   }
 }
 </script>
 
 <style lang="less">
-@import url('./assets/css/default.less');
-@import url('./assets/css/iconfont.css');
+@import url("./assets/css/default.less");
+@import url("./assets/css/iconfont.css");
 </style>

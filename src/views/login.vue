@@ -35,7 +35,7 @@
           />
         </ValidationProvider>
         <div style="margin: 16px 0;">
-          <van-button block type="info" @click="onSubmit">提交</van-button>
+          <van-button block type="info" @click="onSubmit">立即登录</van-button>
         </div>
       </ValidationObserver>
       <div class="login_info">
@@ -58,7 +58,7 @@
         </li>
       </ul>
     </div>
-     <!-- loading -->
+    <!-- loading -->
     <zr-loading v-show="loading" />
     <!-- 图片验证组件 -->
     <SwipeVerification :showSlidingValidation="showSlidingValidation" @handleSlidingValidation="handleSlidingValidation" />
@@ -68,7 +68,6 @@
 <script>
 import { Button, Field, Toast, Form, Notify } from 'vant'
 import { ValidationProvider, ValidationObserver } from 'vee-validate'
-import zrLoading from '../components/common/loading'
 import SwipeVerification from '../components/common/SwipeVerification'
 import { mapActions } from 'vuex'
 // import axios from 'axios'
@@ -90,7 +89,6 @@ export default {
     [Field.name]: Field,
     [Toast.name]: Toast,
     [Form.name]: Form,
-    zrLoading,
     ValidationProvider,
     ValidationObserver,
     SwipeVerification

@@ -4,7 +4,7 @@
  */
 import axios from 'axios'
 import router from '../router'
-import store from '../store/index'
+import store from '../store'
 import { Toast } from 'vant'
 
 /**
@@ -26,6 +26,14 @@ const tip = msg => {
 const toLogin = () => {
   router.replace({
     path: '/login',
+    query: {
+      redirect: router.currentRoute.fullPath
+    }
+  })
+}
+const toError = () => {
+  router.replace({
+    path: '/error',
     query: {
       redirect: router.currentRoute.fullPath
     }
@@ -54,9 +62,10 @@ const errorHandle = (status, other) => {
       break
     // 404请求不存在
     case 404:
-      tip('请求的资源不存在')
+      toError()
       break
     default:
+      toError()
       console.log(other)
   }
 }

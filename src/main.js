@@ -6,9 +6,15 @@ import api from './api' // 导入api接口
 import './utils/validator'
 import tools from './utils/tools'
 import 'amfe-flexible'
+import divider from './components/common/divider'
+import zrLoading from './components/common/loading'
 Vue.prototype.$axios = api // 将api挂载到vue的原型上
 Vue.prototype.$tools = tools
 Vue.config.productionTip = false
+// 引入全局组件
+Vue.component('divider', divider)
+// 引入全局加载动画
+Vue.component('zrLoading', zrLoading)
 // 路由守卫
 store.state.user.isLogin = localStorage.getItem('isLogin') // 获取本地存储的token
 router.beforeEach((to, from, next) => {
@@ -17,8 +23,7 @@ router.beforeEach((to, from, next) => {
       next()
     } else {
       next({
-        path: '/login',
-        query: { redirect: to.fullPath } // 将跳转的路由path作为参数，登录成功后跳转到该路由
+        path: '/login'
       })
     }
   } else {

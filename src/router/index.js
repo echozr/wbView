@@ -13,6 +13,14 @@ const routes = [
     }
   },
   {
+    path: '/setting',
+    name: 'setting',
+    component: () => import(/* webpackChunkName: "setting" */ '../views/setting.vue'),
+    meta: {
+      isLogin: true
+    }
+  },
+  {
     path: '/login',
     name: 'login',
     component: () => import(/* webpackChunkName: "login" */ '../views/login.vue'),
@@ -32,6 +40,14 @@ const routes = [
     path: '/resetPassword',
     name: 'resetPassword',
     component: () => import(/* webpackChunkName: "resetPassword" */ '../views/resetPassword.vue')
+  },
+  {
+    path: '/error',
+    name: 'error',
+    component: () => import(/* webpackChunkName: "404" */ '../views/error.vue'),
+    meta: {
+      isLogin: false
+    }
   }
 ]
 
