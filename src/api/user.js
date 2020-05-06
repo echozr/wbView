@@ -22,6 +22,14 @@ const user = {
   // 修改用户信息
   changeInfo (params) {
     return axios.post(`${base.api}/user/changeInfo`, qs.stringify(params))
+  },
+  // 修改密码
+  changePassword (params) {
+    return axios.post(`${base.api}/user/changePassword`, qs.stringify(params))
+  },
+  // 退出
+  logout () {
+    return axios.post(`${base.api}/user/logout`)
   }
 }
 

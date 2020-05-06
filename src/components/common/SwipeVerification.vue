@@ -26,7 +26,7 @@
       <div class="sliding-validation-image-loading" v-show="loading">
         <span></span>
       </div>
-      <canvas ref="canvas"></canvas>
+      <canvas ref="canvas"  :style="{ width: imageWidth+'px', height: imageheight + 'px' }"></canvas>
       <canvas ref="blockCanvas"></canvas>
       <p
         class="sliding-validation-image-hint"
@@ -150,8 +150,8 @@ export default {
     // 创建画布
     createCanvas () {
       const canvas = this.$refs.canvas
-      canvas.width = this.imageWidth
-      canvas.height = this.imageheight
+      this.$refs.canvas.width = this.imageWidth
+      this.$refs.canvas.height = this.imageheight
       this.imageCtx = canvas.getContext('2d')
       const blockCanvas = this.$refs.blockCanvas
       blockCanvas.width = this.blocklength + this.blockRadii

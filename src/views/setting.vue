@@ -11,12 +11,17 @@
         <van-icon name="arrow" class="van-cell__right-icon ml-auto" />
       </div>
       <divider />
-      <van-cell title="修改密码" is-link />
+      <van-cell title="修改密码" is-link @click="openPassword" />
       <divider />
-      <van-button type="primary" block>退出</van-button>
+      <van-button type="primary" block @click="Logout">退出</van-button>
     </div>
+    <!-- 修改用户信息 -->
     <van-popup class="zrPop" v-model="show" get-container="#app" :overlay="true"  position="right">
-      <zr-setUser @close='closePopup' :userInfo="userInfo" />
+      <zr-setUser  @close='closePopup' :userInfo="userInfo" />
+    </van-popup>
+     <!-- 修改密码 -->
+     <van-popup class="zrPop" v-model="showPass" get-container="#app" :overlay="true"  position="right">
+      <zr-password  @close='closePass'  />
     </van-popup>
   </div>
 </template>
@@ -24,12 +29,14 @@
 import zrHeader from '../components/common/header'
 import { Cell, Button, Icon, Popup } from 'vant'
 import zrSetUser from '../components/setting/userInfo'
+import zrPassword from '../components/setting/changePassword'
 export default {
   name: 'setting',
   data () {
     return {
       userInfo: {},
-      show: false
+      show: false,
+      showPass: false
     }
   },
   mounted () {
@@ -38,6 +45,7 @@ export default {
   components: {
     zrHeader,
     zrSetUser,
+    zrPassword,
     [Cell.name]: Cell,
     [Button.name]: Button,
     [Icon.name]: Icon,
@@ -47,8 +55,23 @@ export default {
     openPopup () {
       this.show = true
     },
+    openPassword () {
+      this.showPass = true
+    },
     closePopup (type) {
       this.show = type
+    },
+    closePass (type) {
+      this.showPass = type
+    },
+    async Logout () {
+      const { data, status } = await this.$axios.user.logout()
+      if (status === 200 && data) {
+        if (data.code === 200) {
+          localStorage.clear()
+          this.$router.push({ path: '/login' })
+        }
+      }
     }
   }
 }

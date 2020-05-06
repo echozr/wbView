@@ -123,6 +123,7 @@ export default {
     async saveInfo () {
       console.log(this.user)
       this.loading = true
+      debugger
       const { data, status } = await this.$axios.user.changeInfo(this.user)
       this.loading = false
       if (status === 200 && data) {
