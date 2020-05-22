@@ -3,38 +3,100 @@
     <div div class="header">
       <span class="leftIcon iconfont"  @click="close">&#xe609;</span>
       <div class="title">发微博</div>
-      <span class="rightIcon iconfont" @click="save" >&#xe61c;</span>
+      <span  class="rightIcon"  ><button v-show ="content!=''" class="iconfont"  @click="save" :disabled='disabled' >&#xe61c;</button></span>
     </div>
     <div >
-      <van-field  class="editor" v-model="message" rows="5" autosize type="textarea" maxlength="500" placeholder="分享新鲜事..." show-word-limit />
+      <van-field  class="editor" v-model="content" rows="5" autosize type="textarea" maxlength="500" placeholder="分享新鲜事..." show-word-limit />
     </div>
     <divider/>
     <div class="uploadWarp">
-      <van-uploader v-model="fileList" multiple />
+      <van-uploader v-model="fileList"   :max-count="9" :after-read="afterRead" @delete="delImg" />
     </div>
-
+    <zr-loading  v-if="loading" />
   </div>
 </template>
 <script>
-import { Uploader, Field, Button, Image as VanImage } from 'vant'
+import { Uploader, Field, Button, Image as VanImage, Notify } from 'vant'
+import { mapActions } from 'vuex'
 export default {
   props: {
   },
   data () {
     return {
-      message: '',
-      fileList: []
+      content: '',
+      loading: false,
+      imageARR: [],
+      fileList: [],
+      disabled: false
     }
   },
   methods: {
+    ...mapActions(['createBlogAction']),
     // 关闭弹窗
     close () {
       this.$emit('close', false)
     },
+    async afterRead (file) {
+      const File = file.file
+      const { data, status } = await this.$axios.util.upload(File)
+      if (status === 200 && data) {
+        if (data.code === 200) {
+          this.imageARR.push(data.data.url)
+          console.log(this.imageARR)
+        } else {
+          Notify({ type: 'error', message: ' 添加图片失败 ' })
+        }
+      }
+    },
     save () {
-      console.log(this.fileList)
+      this.disabled = true
+      this.loading = true
+      setTimeout(() => {
+        this.creatBlod()
+      }, 1000)
+    },
+    // 清空内容
+    claerCont () {
+      this.content = ''
+      this.fileList = []
+    },
+    // 保存方法
+    async creatBlod () {
+      const { status, data } = await this.$axios.blog.creatBlog({
+        content: this.content,
+        image: this.imageARR
+      })
+      if (status === 200 && data) {
+        if (data.code === 200) {
+          Notify({ type: 'success', message: ' 发布成功！ ' })
+          const blog = data.data
+          const item = {
+            id: blog.id,
+            content: blog.content,
+            blogUploads: blog.image,
+            user: blog.user
+          }
+          this.loading = false
+          this.createBlogAction(item)
+          setTimeout(() => {
+            this.disabled = false
+            this.claerCont()
+            this.$emit('addBlog', { popStaue: false })
+          }, 3000)
+        } else {
+          Notify({ type: 'success', message: ' 发布失败 ' })
+        }
+      }
+    },
+    // 删除图片
+    delImg (file) {
+      console.log(file)
+      this.imageARR = this.imageARR.filter(v => {
+        console.log(v)
+        return v.indexOf(file.file.name) === -1
+      })
+      console.log(this.imageARR)
     }
-
   },
   components: {
     [Uploader.name]: Uploader,

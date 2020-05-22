@@ -10,6 +10,10 @@ const blog = {
   // post 获取微博列表
   getBlogList (params) {
     return axios.post(`${base.api}/blog/getBlogList`, qs.stringify(params))
+  },
+  // 创建微博
+  creatBlog (params) {
+    return axios.post(`${base.api}/blog/creatBlog`, qs.stringify(params))
   }
 }
 

@@ -8,43 +8,46 @@
       </div>
     </div>
     <div  v-else class="contain">
-      <div v-if="list.blogList.length >0">
-        <div v-for="(item,index) in list.blogList" :key="index">
+      <div v-if="blogList.length >0">
+        <div v-for="(item,index) in blogList" :key="index">
           <blog-item :blogItem="item"></blog-item>
         </div>
       </div>
       <div v-else>
-        <div>暂无数据</div>
+        <van-empty description="暂无数据" />
       </div>
     </div>
     <!-- 发表微博 -->
     <van-popup class="zrPop" v-model="show" get-container="#app" :overlay="true"  position="right">
-      <add-blog  @close='closePopup' />
+      <add-blog  @close='closePopup' @addBlog='addBlogInfo' />
     </van-popup>
-    <zr-loading v-if="loading" />
+    <zr-loading  v-show="loading" />
   </div>
 </template>
 <script>
 import zrHeader from '../components/common/header'
 import blogItem from '../components/common/bolgItem'
 import addBlog from '../components/home/addBlog'
-import { Popup, Skeleton } from 'vant'
+import { Popup, Skeleton, Empty } from 'vant'
+import { mapState } from 'vuex'
 export default {
   name: 'home',
   data () {
     return {
       show: false,
-      loading: true,
-      list: {
-        blogList: [],
-        pagesize: 5,
-        pageIndex: 0,
-        count: 0
-      }
+      pagesize: 5,
+      pageIndex: 0
     }
   },
-  mounted () {
-    this.getBlogList()
+  computed: {
+    ...mapState({
+      blogList: state => state.blog.blogList,
+      count: state => state.blog.count,
+      loading: state => state.blog.loading
+    })
+  },
+  beforeCreate () {
+    this.$store.dispatch('getList', {})
   },
   methods: {
     closePopup (type) {
@@ -53,16 +56,9 @@ export default {
     addBlog () {
       this.show = true
     },
-    async getBlogList () {
-      const self = this
-      const { data, status } = await this.$axios.blog.getBlogList({ pagesize: self.list.pagesize, pageIndex: self.list.pageIndex })
-      console.log(data, status)
-      if (status === 200 && data) {
-        if (data.code === 200) {
-          self.list = data.data
-          self.loading = false
-        }
-      }
+    addBlogInfo (data) {
+      this.show = data.popStaue
+      console.log(data)
     }
   },
   components: {
@@ -70,8 +66,8 @@ export default {
     blogItem,
     addBlog,
     [Popup.name]: Popup,
-    [Skeleton.name]: Skeleton
-
+    [Skeleton.name]: Skeleton,
+    [Empty.name]: Empty
   }
 }
 </script>
@@ -83,7 +79,6 @@ export default {
   font-size: 6vw;
   position: absolute;
   top: 3vw;
-  z-index: 1000000;
   right: 4vw;
   color: #9E9E9E;
 }

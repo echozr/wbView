@@ -104,7 +104,6 @@ export default {
     async handleSlidingValidation (params) {
       const { type, msg } = params
       if (msg === '验证成功') {
-        debugger
         this.loading = true
         this.showSlidingValidation = type
         const { data, status } = await this.$axios.user.login(this.user)
