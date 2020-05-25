@@ -9,9 +9,11 @@
     </div>
     <div  v-else class="contain">
       <div v-if="blogList.length >0">
-        <div v-for="(item,index) in blogList" :key="index">
-          <blog-item :blogItem="item"></blog-item>
-        </div>
+        <van-list v-model="isLoading"  :finished="finished"   finished-text="没有更多了"   @load="onLoad" >
+          <div v-for="(item,index) in blogList" :key="index">
+            <blog-item :blogItem="item"></blog-item>
+          </div>
+        </van-list>
       </div>
       <div v-else>
         <van-empty description="暂无数据" />
@@ -28,28 +30,31 @@
 import zrHeader from '../components/common/header'
 import blogItem from '../components/common/bolgItem'
 import addBlog from '../components/home/addBlog'
-import { Popup, Skeleton, Empty } from 'vant'
-import { mapState } from 'vuex'
+import { Popup, Skeleton, Empty, List } from 'vant'
+import { mapState, mapActions } from 'vuex'
 export default {
   name: 'home',
   data () {
     return {
       show: false,
-      pagesize: 5,
-      pageIndex: 0
+      timer: null
     }
   },
   computed: {
     ...mapState({
       blogList: state => state.blog.blogList,
       count: state => state.blog.count,
-      loading: state => state.blog.loading
+      loading: state => state.blog.loading,
+      pageIndex: state => state.blog.pageIndex,
+      finished: state => state.blog.finished,
+      isLoading: state => state.blog.isLoading
     })
   },
   beforeCreate () {
     this.$store.dispatch('getList', {})
   },
   methods: {
+    ...mapActions(['loadMore']),
     closePopup (type) {
       this.show = type
     },
@@ -59,6 +64,18 @@ export default {
     addBlogInfo (data) {
       this.show = data.popStaue
       console.log(data)
+    },
+    onLoad () {
+      if (this.blogList.length >= this.count) {
+        this.$store.state.blog.isLoading = false
+        this.$store.state.blog.finished = true
+      } else {
+        this.$store.state.blog.isLoading = true
+        return this.loadMore({
+          pagesize: this.pagesize,
+          pageIndex: this.pageIndex
+        })
+      }
     }
   },
   components: {
@@ -67,7 +84,8 @@ export default {
     addBlog,
     [Popup.name]: Popup,
     [Skeleton.name]: Skeleton,
-    [Empty.name]: Empty
+    [Empty.name]: Empty,
+    [List.name]: List
   }
 }
 </script>
