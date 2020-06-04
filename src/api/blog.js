@@ -14,6 +14,10 @@ const blog = {
   // 创建微博
   creatBlog (params) {
     return axios.post(`${base.api}/blog/creatBlog`, qs.stringify(params))
+  },
+  // 根据用户获取附件图片
+  getUploadByUser (params) {
+    return axios.post(`${base.api}/blog/getUploadByUser`, qs.stringify(params))
   }
 }
 

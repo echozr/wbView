@@ -77,7 +77,7 @@ export default {
     return {
       user: {
         userName: 'fanruoruo',
-        password: 'Aa111111'
+        password: 'Aa123456'
       },
       loading: false,
       showSlidingValidation: false,

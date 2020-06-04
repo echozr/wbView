@@ -10,8 +10,8 @@
     <div  v-else class="contain">
       <div v-if="blogList.length >0">
         <van-list v-model="isLoading"  :finished="finished"   finished-text="没有更多了"   @load="onLoad" >
-          <div v-for="(item,index) in blogList" :key="index">
-            <blog-item :blogItem="item"></blog-item>
+          <div v-for="(item,index) in blogList" :key="index" >
+              <blog-item :blogItem="item" :userInfoClick="true" @toUserInfo="openUserInfo"  :blogInfoClick="true" @toBolgInfo="openBlogInfo"></blog-item>
           </div>
         </van-list>
       </div>
@@ -23,7 +23,7 @@
     <van-popup class="zrPop" v-model="show" get-container="#app" :overlay="true"  position="right">
       <add-blog  @close='closePopup' @addBlog='addBlogInfo' />
     </van-popup>
-    <zr-loading  v-show="loading" />
+    <router-view></router-view>
   </div>
 </template>
 <script>
@@ -37,7 +37,8 @@ export default {
   data () {
     return {
       show: false,
-      timer: null
+      timer: null,
+      itemUserName: {}
     }
   },
   computed: {
@@ -54,7 +55,7 @@ export default {
     this.$store.dispatch('getList', {})
   },
   methods: {
-    ...mapActions(['loadMore']),
+    ...mapActions(['loadMore', 'setCurrentUser']),
     closePopup (type) {
       this.show = type
     },
@@ -76,6 +77,15 @@ export default {
           pageIndex: this.pageIndex
         })
       }
+    },
+    // 跳转到详情页
+    openBlogInfo (blogId) {
+      console.log(blogId)
+      this.$router.push({ path: `/blogInfo/:${blogId}` })
+    },
+    openUserInfo (user) {
+      this.setCurrentUser(user)
+      this.$router.push({ path: `/userInfo/:${user.userName}` })
     }
   },
   components: {

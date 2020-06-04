@@ -27,6 +27,10 @@ const user = {
   changePassword (params) {
     return axios.post(`${base.api}/user/changePassword`, qs.stringify(params))
   },
+  // 根据用户名获取用户信息
+  getUserInfo (params) {
+    return axios.post(`${base.api}/user/getUserInfo`, qs.stringify(params))
+  },
   // 退出
   logout () {
     return axios.post(`${base.api}/user/logout`)

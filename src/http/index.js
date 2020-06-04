@@ -93,7 +93,15 @@ instance.interceptors.request.use(
 // 响应拦截器
 instance.interceptors.response.use(
   // 请求成功
-  res => res.status === 200 ? Promise.resolve(res) : Promise.reject(res),
+  res => {
+    if (res.status === 200) {
+      if (res.data.code === 10005) {
+        return toLogin()
+      }
+      return Promise.resolve(res)
+    }
+    return Promise.reject(res)
+  },
   // 请求失败
   error => {
     const { response } = error

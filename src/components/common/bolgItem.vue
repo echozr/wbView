@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="blogItem flex-column">
-      <div class="userCont row">
+      <div class="userCont row"  @click="userInfoClick && toUserInfo(blogItem.user)">
         <van-image
           round
           width="15vw"
@@ -15,12 +15,14 @@
           <span class="dis">{{blogItem.user.city}}</span>
         </div>
       </div>
-      <p class="blogContent">{{blogItem.content}}</p>
-      <ul class="blogImgWarp row" v-if="blogItem.blogUploads.length>0">
-          <li v-for="(item,index) in blogItem.blogUploads" :key="index">
-            <van-image width="29vw" height="29vw" Lazy-Load :src="item" @click="HandleclickImg(index)" />
-          </li>
-      </ul>
+      <div @click=" blogInfoClick && toBolgInfo(blogItem.id)">
+          <p class="blogContent">{{blogItem.content}}</p>
+          <ul class="blogImgWarp row" v-if="blogItem.blogUploads.length>0">
+              <li v-for="(item,index) in blogItem.blogUploads" :key="index">
+                <van-image width="29vw" height="29vw" Lazy-Load :src="item" @click.stop="HandleclickImg(index)" />
+              </li>
+          </ul>
+      </div>
     </div>
     <divider />
   </div>
@@ -36,6 +38,14 @@ export default {
       default () {
         return {}
       }
+    },
+    userInfoClick: {
+      type: Boolean,
+      default: false
+    },
+    blogInfoClick: {
+      type: Boolean,
+      default: false
     }
   },
   data () {
@@ -49,6 +59,14 @@ export default {
         images: this.blogItem.blogUploads,
         startPosition: index
       })
+    },
+    toUserInfo (user) {
+      console.log(user)
+      this.$emit('toUserInfo', user)
+    },
+    toBolgInfo (blogId) {
+      console.log(blogId)
+      this.$emit('toBolgInfo', blogId)
     }
   },
   components: {

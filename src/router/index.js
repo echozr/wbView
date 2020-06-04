@@ -10,7 +10,19 @@ const routes = [
     component: () => import(/* webpackChunkName: "login" */ '../views/home.vue'),
     meta: {
       isLogin: true
-    }
+    },
+    children: [
+      {
+        path: '/blogInfo/:id',
+        name: 'blogInfo',
+        component: () => import(/* webpackChunkName: "blogInfo" */ '../views/blogInfo.vue')
+      },
+      {
+        path: '/userInfo/:userName',
+        name: 'userInfo',
+        component: () => import(/* webpackChunkName: "userInfo" */ '../views/userInfo.vue')
+      }
+    ]
   },
   {
     path: '/setting',

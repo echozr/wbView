@@ -5,7 +5,8 @@
 export default {
   state: {
     isLogin: false,
-    userInfo: {}
+    userInfo: {},
+    currentUserInfo: {}
   },
   getter: {
   },
@@ -17,8 +18,10 @@ export default {
     Logout: (state) => {
       state.isLogin = false
       state.userInfo = ''
+    },
+    currentUser: (state, data) => {
+      state.currentUserInfo = data
     }
-
   },
   actions: {
     // 登录
@@ -32,6 +35,10 @@ export default {
       localStorage.removeItem('isLogin')
       localStorage.removeItem('userInfo')
       commit('Logout')
+    },
+    // 获取当前用户信息
+    setCurrentUser: ({ commit }, data) => {
+      commit('currentUser', data)
     }
   }
 }
