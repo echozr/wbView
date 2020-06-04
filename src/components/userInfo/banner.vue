@@ -15,8 +15,7 @@
         </div>
       </div>
       <p class="fil-desc">
-        微博认证：
-        <span>微博知名综艺节目帐号 知名娱乐博主</span>
+        个人签名：{{currentUser.city}}
       </p>
     </div>
   </div>
@@ -124,6 +123,12 @@ export default {
       font-size: 3.5vw;
       color: #ffffff;
       margin-top: 2vw;
+      width: 100%;
+      height: 10vw;
+      line-height: 10vw;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
     }
   }
 }

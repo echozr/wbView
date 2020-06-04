@@ -33,22 +33,29 @@
         <van-icon  v-if="isEdit" name="arrow" class="van-cell__right-icon right-arror" />
       </template>
     </van-cell>
-      <van-cell class="van-hairline--bottom" title="城市" size="middle" >
+     <!-- 性别弹出框 -->
+    <van-popup v-model="show" position="bottom" get-container="#app">
+      <van-picker show-toolbar  :columns="columns"  @confirm="onConfirm" @cancel="show = false" />
+    </van-popup>
+      <!-- <van-cell class="van-hairline--bottom" title="城市" size="middle" >
       <template>
         <van-field  v-if="!isEdit"  :value="user.city" readonly class="left-cont" input-align="right" />
         <van-field v-else readonly clickable name="picker" :value="user.city" placeholder="选择城市" class="left-cont" input-align="right"  @click="showCity= true"/>
         <van-icon  v-if="isEdit" name="arrow" class="van-cell__right-icon right-arror" />
       </template>
+    </van-cell> -->
+    <!-- 城市弹出框 -->
+    <!-- <van-popup v-model="showCity" position="bottom" get-container="#app">
+      <van-picker show-toolbar  :columns="columnsCity"  @confirm="onConfirmCity" @cancel="showCity = false" />
+    </van-popup> -->
+     <van-cell class="van-hairline--bottom" title="个人说明" size="middle" >
+      <template>
+        <van-field v-if="!isEdit" :value="user.city" readonly class="left-cont" input-align="right" />
+        <van-field v-else v-model="user.city" class="left-cont" input-align="right" />
+        <van-icon  v-if="isEdit" name="arrow" class="van-cell__right-icon right-arror" />
+      </template>
     </van-cell>
     <van-button v-if="isEdit" type="primary" block @click="saveInfo">保存编辑</van-button>
-    <!-- 性别弹出框 -->
-    <van-popup v-model="show" position="bottom" get-container="#app">
-      <van-picker show-toolbar  :columns="columns"  @confirm="onConfirm" @cancel="show = false" />
-    </van-popup>
-    <!-- 城市弹出框 -->
-    <van-popup v-model="showCity" position="bottom" get-container="#app">
-      <van-picker show-toolbar  :columns="columnsCity"  @confirm="onConfirmCity" @cancel="showCity = false" />
-    </van-popup>
     <zr-loading v-show='loading' />
   </div>
 </template>
@@ -73,7 +80,6 @@ export default {
         gender: ''
       },
       columns: [{ text: '男', value: '1' }, { text: '女', value: '2' }, { text: '保密', value: '3' }],
-      columnsCity: ['北京市', '天津市', '西安市', '上海市', '成都市', '广州市', '深圳市'],
       show: false,
       showCity: false,
       isEdit: false,

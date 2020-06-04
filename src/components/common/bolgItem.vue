@@ -12,7 +12,7 @@
         />
         <div class="userInfotext d-flex flex-column j-center">
           <b class="name">{{blogItem.user.nickname}}</b>
-          <span class="dis">{{blogItem.user.city}}</span>
+          <span class="dis">{{blogItem.createdAt.split('T')[0]}}</span>
         </div>
       </div>
       <div @click=" blogInfoClick && toBolgInfo(blogItem.id)">
@@ -90,6 +90,7 @@ export default {
       .dis {
         font-size: 3.5vw;
         color: #999;
+        line-height: 6vw;
       }
     }
   }

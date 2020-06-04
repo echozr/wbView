@@ -6,7 +6,7 @@
         <img :src="userInfo.picture" />
         <div class="content">
           <h3 class="name">{{userInfo.nickname}}</h3>
-          <p class="dis">{{userInfo.city}}</p>
+          <p class="dis" :title="userInfo.city">{{userInfo.city}}</p>
         </div>
         <van-icon name="arrow" class="van-cell__right-icon ml-auto" />
       </div>
@@ -106,6 +106,9 @@ export default {
       line-height: 10vw;
       font-size: 4vw;
       color: #808080;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
     }
   }
 }
