@@ -8,9 +8,9 @@
         </router-link>
       </li>
       <li>
-        <router-link to="/resetPassword">
+        <router-link to="/message">
           <span class="iconfont">&#xe61f;</span>
-          <b>消息</b>
+          <b>好友</b>
         </router-link >
       </li>
       <li>

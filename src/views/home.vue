@@ -11,7 +11,7 @@
       <div v-if="blogList.length >0">
         <van-list v-model="isLoading"  :finished="finished"   finished-text="没有更多了"   @load="onLoad" >
           <div v-for="(item,index) in blogList" :key="index" >
-              <blog-item :blogItem="item" :userInfoClick="true" @toUserInfo="openUserInfo"  :blogInfoClick="true" @toBolgInfo="openBlogInfo"></blog-item>
+              <blog-item :blogItem="item" :userInfoClick="true" :blogInfoClick="true" ></blog-item>
           </div>
         </van-list>
       </div>
@@ -77,15 +77,6 @@ export default {
           pageIndex: this.pageIndex
         })
       }
-    },
-    // 跳转到详情页
-    openBlogInfo (blogId) {
-      console.log(blogId)
-      this.$router.push({ path: `/blogInfo/:${blogId}` })
-    },
-    openUserInfo (user) {
-      this.setCurrentUser(user)
-      this.$router.push({ path: `/userInfo/:${user.userName}` })
     }
   },
   components: {

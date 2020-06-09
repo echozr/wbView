@@ -62,11 +62,11 @@ export default {
     },
     toUserInfo (user) {
       console.log(user)
-      this.$emit('toUserInfo', user)
+      this.$router.push({ path: `/userInfo/:${user.userName}` })
     },
     toBolgInfo (blogId) {
       console.log(blogId)
-      this.$emit('toBolgInfo', blogId)
+      this.$router.push({ path: `/blogInfo/:${blogId}` })
     }
   },
   components: {

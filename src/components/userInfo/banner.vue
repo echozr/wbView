@@ -17,11 +17,16 @@
       <p class="fil-desc">
         个人签名：{{currentUser.city}}
       </p>
+      <div class="follow" v-if="isMySelf">
+        <van-button v-if='isFollow' type="primary" size="small" round @click.stop='shwoAction(currentUser.id,"cancal")'>取消关注</van-button>
+        <van-button v-else class="gzBtn" type="primary" size="small" round @click.stop='shwoAction(currentUser.id,"follow")'>关注</van-button>
+      </div>
     </div>
+    <van-action-sheet v-model="show" :actions="actions" :round="false" cancel-text="取消" close-on-click-action @cancel="onCancel" @select="onChange"/>
   </div>
 </template>
 <script>
-import { Image as VanImage } from 'vant'
+import { Image as VanImage, Button, ActionSheet, Notify } from 'vant'
 export default {
   name: 'banner',
   props: {
@@ -40,14 +45,69 @@ export default {
       }
     }
   },
+  watch: {
+    currentUser (newVal, oldVal) {
+      console.log(newVal)
+      this.Follow(newVal.id)
+      this.isMySelf = newVal.id !== JSON.parse(localStorage.getItem('userInfo')).id
+    }
+  },
   data () {
     return {
       dafaultImg: 'http://127.0.0.1:3000/1591172738522.timg.jpg',
-      Info: {}
+      Info: {},
+      show: false,
+      followId: null,
+      isFollow: true,
+      isMySelf: false,
+      actions: [{ name: '确认取消关注' }]
+    }
+  },
+  methods: {
+    shwoAction (id, type) {
+      console.log(type)
+      this.actions = type === 'cancal' ? [{ name: '确认取消关注' }] : [{ name: '添加关注' }]
+      this.followId = id
+      this.show = true
+    },
+    async Follow (id) {
+      if (id) {
+        const { status, data } = await this.$axios.follower.isFollow({ followerId: id })
+        if (status === 200 && data) {
+          this.isFollow = data.data === 1
+        } else {
+          Notify({ type: 'success', message: 'chengg' })
+        }
+      }
+    },
+    async onChange (item) {
+      console.log(item.name)
+      // 取消关注
+      if (item.name === '确认取消关注') {
+        const { status, data } = await this.$axios.follower.unFollow({ followerId: this.followId })
+        if (status === 200 && data) {
+          Notify({ type: 'success', message: data.data })
+          this.isFollow = false
+          this.$emit('Follower')
+        } else {
+          Notify({ type: 'success', message: data.message })
+        }
+      } else { // 添加关注
+        const { status, data } = await this.$axios.follower.addFollow({ followerId: this.followId })
+        if (status === 200 && data) {
+          Notify({ type: 'success', message: '关注成功' })
+          this.isFollow = true
+          this.$emit('Follower')
+        } else {
+          Notify({ type: 'success', message: data.message })
+        }
+      }
     }
   },
   components: {
-    [VanImage.name]: VanImage
+    [VanImage.name]: VanImage,
+    [Button.name]: Button,
+    [ActionSheet.name]: ActionSheet
   }
 }
 </script>
@@ -76,8 +136,8 @@ export default {
   .banner-info {
     position: absolute;
     width: 80vw;
-    height: 50vw;
-    top: 5vw;
+    height: 55vw;
+    top: 1vw;
     left: 10vw;
     display: flex;
     flex-direction: column;
@@ -89,14 +149,14 @@ export default {
       margin: 5vw auto 2vw;
     }
     .userName {
-      font-size: 5.5vw;
+      font-size: 4vw;
       color: #ffffff;
       margin-bottom: 1vw;
     }
     .fans{
       display: flex;
       flex-direction: row;
-      font-size: 4.5vw;
+      font-size: 4vw;
       color: #ffffff;
         .txt-shadow{
           padding: 0 8px;
@@ -122,14 +182,18 @@ export default {
     .fil-desc{
       font-size: 3.5vw;
       color: #ffffff;
-      margin-top: 2vw;
       width: 100%;
-      height: 10vw;
-      line-height: 10vw;
+      height: 7vw;
+      line-height: 7vw;
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
     }
   }
 }
+
+  .gzBtn{
+    background: #fff;
+    color: #07c160;
+  }
 </style>

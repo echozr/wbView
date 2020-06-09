@@ -1,6 +1,6 @@
 <template>
   <div class="allContainer"  ref="viewBox">
-      <detail-banner :currentUser="currentUser" :fans="fans" :follower="follower"></detail-banner>
+      <detail-banner :currentUser="currentUser" :fans="fans" :follower="follower"  @Follower="changeFollower"></detail-banner>
       <div class="InfoHeader">
       <router-link tag="div" to="/" class="header-abs" v-show="showAbs">
         <div class="iconfont header-abs-back">&#xe609;</div>
@@ -110,12 +110,16 @@ export default {
     // 获取博客（待完善下拉加载功能）
     async getBlogs () {
       const { data, status } = await this.$axios.blog.getBlogList({ userName: this.NameParams })
+      this.loading = false
       if (status === 200 && data) {
         this.blogs = data.data.blogList
-        this.loading = false
       } else {
         Notify({ type: 'success', message: data.message })
       }
+    },
+    // 点击关注获取消关注，重新获取粉丝数量
+    changeFollower () {
+      this.getFansAndFollower()
     }
   },
   mounted () {
