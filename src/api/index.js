@@ -10,11 +10,14 @@ import util from '@/api/util'
 import blog from '@/api/blog'
 // 关注的相关接口
 import follower from '@/api/follower'
+// 点赞的相关接口
+import praise from '@/api/praise'
 
 // 导出接口
 export default {
   user,
   util,
   blog,
-  follower
+  follower,
+  praise
 }

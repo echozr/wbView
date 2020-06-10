@@ -30,6 +30,9 @@ export default {
       disabled: false
     }
   },
+  mounted () {
+    this.claerCont()
+  },
   methods: {
     ...mapActions(['createBlogAction']),
     // 关闭弹窗
@@ -49,6 +52,7 @@ export default {
       }
     },
     save () {
+      debugger
       this.disabled = true
       this.loading = true
       setTimeout(() => {
@@ -59,6 +63,7 @@ export default {
     claerCont () {
       this.content = ''
       this.fileList = []
+      this.imageARR = []
     },
     // 保存方法
     async creatBlod () {

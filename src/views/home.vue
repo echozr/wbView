@@ -11,7 +11,7 @@
       <div v-if="blogList.length >0">
         <van-list v-model="isLoading"  :finished="finished"   finished-text="没有更多了"   @load="onLoad" >
           <div v-for="(item,index) in blogList" :key="index" >
-              <blog-item :blogItem="item" :userInfoClick="true" :blogInfoClick="true" ></blog-item>
+              <blog-item :blogItem="item" :userInfoClick="true" :blogInfoClick="true" :praiseClick="true" @addPraise="getList" ></blog-item>
           </div>
         </van-list>
       </div>
@@ -55,7 +55,7 @@ export default {
     this.$store.dispatch('getList', {})
   },
   methods: {
-    ...mapActions(['loadMore', 'setCurrentUser']),
+    ...mapActions(['loadMore', 'setCurrentUser', 'getList']),
     closePopup (type) {
       this.show = type
     },

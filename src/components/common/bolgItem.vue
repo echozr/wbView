@@ -12,7 +12,7 @@
         />
         <div class="userInfotext d-flex flex-column j-center">
           <b class="name">{{blogItem.user.nickname}}</b>
-          <span class="dis">{{blogItem.createdAt.split('T')[0]}}</span>
+          <span class="dis">{{blogItem.createdAt}}</span>
         </div>
       </div>
       <div @click=" blogInfoClick && toBolgInfo(blogItem.id)">
@@ -23,14 +23,23 @@
               </li>
           </ul>
       </div>
+      <div class="tab_control">
+        <div class="tab_item">
+          <span class="iconfont">&#xe60e;</span>
+          <b>1234</b>
+        </div>
+        <div class="tab_item" :class="{'active':blogItem.praisePerson}" @click="praiseClick&&doPraise(blogItem.praisePerson)">
+          <span class="iconfont">&#xe620;</span>
+          <b>{{blogItem.praises}} || 0</b>
+        </div>
+      </div>
     </div>
     <divider />
   </div>
 </template>
 <script>
 // eslint-disable-next-line no-unused-vars
-import { Image as VanImage, Lazyload, ImagePreview } from 'vant'
-
+import { Image as VanImage, Lazyload, ImagePreview, Notify } from 'vant'
 export default {
   props: {
     blogItem: {
@@ -46,6 +55,10 @@ export default {
     blogInfoClick: {
       type: Boolean,
       default: false
+    },
+    praiseClick: {
+      type: Boolean,
+      default: false
     }
   },
   data () {
@@ -54,19 +67,44 @@ export default {
     }
   },
   methods: {
+    // 查看图片
     HandleclickImg (index) {
       ImagePreview({
         images: this.blogItem.blogUploads,
         startPosition: index
       })
     },
+    // 跳转到用户详情
     toUserInfo (user) {
       console.log(user)
       this.$router.push({ path: `/userInfo/:${user.userName}` })
     },
+    // 跳转到博客详情
     toBolgInfo (blogId) {
       console.log(blogId)
       this.$router.push({ path: `/blogInfo/:${blogId}` })
+    },
+    // 点赞获取消
+    async doPraise (type) {
+      // 取消点赞
+      const params = {
+        blogId: this.blogItem.id
+      }
+      if (type) {
+        const { status, data } = await this.$axios.praise.unPraise(params)
+        if (status === 200 && data) {
+          this.$emit('addPraise')
+        } else {
+          Notify({ type: 'success', message: data.message })
+        }
+      } else { // 点赞
+        const { status, data } = await this.$axios.praise.addPraise(params)
+        if (status === 200 && data) {
+          this.$emit('addPraise')
+        } else {
+          Notify({ type: 'success', message: data.message })
+        }
+      }
     }
   },
   components: {
@@ -77,7 +115,7 @@ export default {
 </script>
 <style lang="less" scoped>
 .blogItem {
-  padding: 10px;
+  padding: 10px 10px 0 10px;
   .userCont {
     .userImage {
       margin-right: 3vw;
@@ -109,5 +147,34 @@ export default {
       margin: 1vw;
     }
   }
+  }
+  .tab_control{
+    width: 91vw;
+    height: 10vw;
+    margin: 5px auto 0;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    font-size: 4.5vw;
+    color: #9e9e9e;
+    border-top: 1px solid #eeeeee;
+    .tab_item{
+      width: 45.5vw;
+      height: 10vw;
+      flex: 0 0 45.5vw;
+      text-align: center;
+      line-height: 10vw;
+      &.active{
+        color:#f75050;
+      }
+      span{
+        font-size: 5vw;
+        margin-right: 5px;
+      }
+      b{
+        font-weight: normal;
+      }
+    }
 }
+
 </style>
