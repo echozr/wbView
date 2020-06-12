@@ -22,7 +22,7 @@
         <van-button v-else class="gzBtn" type="primary" size="small" round @click.stop='shwoAction(currentUser.id,"follow")'>关注</van-button>
       </div>
     </div>
-    <van-action-sheet v-model="show" :actions="actions" :round="false" cancel-text="取消" close-on-click-action @cancel="onCancel" @select="onChange"/>
+     <van-action-sheet v-model="show" :actions="actions" :round="false" cancel-text="取消" close-on-click-action @cancel="onCancel" @select="onChange"/>
   </div>
 </template>
 <script>

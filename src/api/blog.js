@@ -18,6 +18,10 @@ const blog = {
   // 根据用户获取附件图片
   getUploadByUser (params) {
     return axios.post(`${base.api}/blog/getUploadByUser`, qs.stringify(params))
+  },
+  // 根据blogId获取微博
+  getBlogItem (params) {
+    return axios.post(`${base.api}/blog/getBlogInfo`, qs.stringify(params))
   }
 }
 

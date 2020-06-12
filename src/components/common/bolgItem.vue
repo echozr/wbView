@@ -7,7 +7,7 @@
           width="15vw"
           height="15vw"
           Lazy-Load
-          :src="blogItem.user.picture"
+          :src="blogItem.user.picture "
           class="userImage"
         />
         <div class="userInfotext d-flex flex-column j-center">
@@ -23,14 +23,14 @@
               </li>
           </ul>
       </div>
-      <div class="tab_control">
+      <div class="tab_control" v-if="praiseClick">
         <div class="tab_item">
           <span class="iconfont">&#xe60e;</span>
-          <b>1234</b>
+          <b>{{blogItem.discusses}}</b>
         </div>
-        <div class="tab_item" :class="{'active':blogItem.praisePerson}" @click="praiseClick&&doPraise(blogItem.praisePerson)">
+        <div class="tab_item" :class="{'active':blogItem.praisePerson}" @click="praiseClick && doPraise(blogItem.praisePerson)">
           <span class="iconfont">&#xe620;</span>
-          <b>{{blogItem.praises}} || 0</b>
+          <b>{{blogItem.praises}}</b>
         </div>
       </div>
     </div>
@@ -45,7 +45,8 @@ export default {
     blogItem: {
       type: Object,
       default () {
-        return {}
+        return {
+        }
       }
     },
     userInfoClick: {
@@ -115,7 +116,7 @@ export default {
 </script>
 <style lang="less" scoped>
 .blogItem {
-  padding: 10px 10px 0 10px;
+  padding: 10px 10px 10px 10px;
   .userCont {
     .userImage {
       margin-right: 3vw;
@@ -133,7 +134,7 @@ export default {
     }
   }
   .blogContent {
-    margin: 3vw;
+    margin: 2vw;
     font-size: 4.3vw;
     color: #1b1a1a;
   }
@@ -158,6 +159,7 @@ export default {
     font-size: 4.5vw;
     color: #9e9e9e;
     border-top: 1px solid #eeeeee;
+    margin-bottom: -10px;
     .tab_item{
       width: 45.5vw;
       height: 10vw;
