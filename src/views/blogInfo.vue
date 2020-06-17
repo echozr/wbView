@@ -11,9 +11,11 @@
         <blog-item :blogItem="blogItem" :userInfoClick="true"></blog-item>
         <van-tabs sticky v-model="active" :offset-top="45">
             <van-tab>
-                <div slot="title">评论</div>
+                <div slot="title">评论 {{discussList.count}}</div>
                 <div>
-                    <van-list></van-list>
+                    <van-list>
+                      <DiscussList :list='discussList.list' @sonDiscuss="sonDiscuss" />
+                    </van-list>
                 </div>
             </van-tab>
             <van-tab>
@@ -37,7 +39,7 @@
         </van-tabs>
     </div>
     <div class="tab_control">
-        <div class="tab_item">
+        <div class="tab_item" @click="doDiscuss(-1,blogItem.id)">
             <span class="iconfont">&#xe60e;</span>
             <b>评论</b>
         </div>
@@ -51,9 +53,10 @@
 </template>
 <script>
 import blogItem from '../components/common/bolgItem'
+import DiscussList from '../components/blogInfo/discussList'
 import praiseList from '../components/blogInfo/praiseList'
 import { Image as VanImage, Tab, Tabs, List, Empty, Notify } from 'vant'
-import { mapActions } from 'vuex'
+import { mapActions, mapMutations, mapState } from 'vuex'
 export default {
   name: 'blogInfo',
   data () {
@@ -79,12 +82,20 @@ export default {
       loading: true
     }
   },
+  computed: {
+    ...mapState({
+      discussList: state => state.blog.discussList
+    })
+  },
   mounted () {
-    this.getBlogItem()
     this.getPraiseList()
+    this.getBlogItem()
+    // 获取评论列表
+    this.getDiscuss({ blogId: this.currertBlogId })
   },
   methods: {
-    ...mapActions(['getList']),
+    ...mapActions(['getList', 'getDiscuss']),
+    ...mapMutations(['setShowTalk']),
     // 根据blogId获取博客详情
     async getBlogItem () {
       const { status, data } = await this.$axios.blog.getBlogItem({ blogId: this.currertBlogId })
@@ -130,11 +141,23 @@ export default {
           Notify({ type: 'success', message: data.message })
         }
       }
+    },
+    // 点击评论
+    doDiscuss (type, blogId) {
+      localStorage.setItem('parentId', type)
+      localStorage.setItem('discussBlogId', blogId)
+      // 通过vuex 控制评论框
+      this.setShowTalk({ talkShow: true })
+    },
+    // 点击子评论
+    sonDiscuss (item) {
+      this.doDiscuss(item.id, item.blogId)
     }
   },
   components: {
     blogItem,
     praiseList,
+    DiscussList,
     [VanImage.name]: VanImage,
     [Tab.name]: Tab,
     [Tabs.name]: Tabs,

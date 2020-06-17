@@ -12,7 +12,11 @@ export default {
     pagesize: 10,
     pageIndex: 1,
     finished: false,
-    isLoading: false
+    isLoading: false,
+    talkShow: false,
+    talkHeight: 54,
+    emojiPicker: false, // 表情框
+    discussList: {} // 评论列表
   },
   getter: {
   },
@@ -35,6 +39,18 @@ export default {
       state.isLoading = false
       state.count = data.count
       state.pageIndex++
+    },
+    setShowTalk: (state, data) => {
+      console.log(data)
+      if ('talkShow' in data) state.talkShow = data.talkShow
+      if ('talkHeight' in data) state.talkHeight = data.talkHeight
+      if ('emojiPicker' in data) state.emojiPicker = data.emojiPicker
+    },
+    setContent: (state, data) => {
+      state.content += data
+    },
+    setDiscuss: (state, data) => {
+      state.discussList = data
     }
 
   },
@@ -56,6 +72,14 @@ export default {
       return api.blog.getBlogList(data).then(res => {
         if (res.data.code === 200) {
           commit('setLoadMore', res.data.data)
+        }
+      })
+    },
+    // 获取评论列表
+    getDiscuss: ({ commit }, data) => {
+      return api.discuss.getDiscussList(data).then(res => {
+        if (res.data.code === 200) {
+          commit('setDiscuss', res.data.data)
         }
       })
     }

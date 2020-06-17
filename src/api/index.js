@@ -12,6 +12,8 @@ import blog from '@/api/blog'
 import follower from '@/api/follower'
 // 点赞的相关接口
 import praise from '@/api/praise'
+// 评论的相关接口
+import discuss from '@/api/discuss'
 
 // 导出接口
 export default {
@@ -19,5 +21,6 @@ export default {
   util,
   blog,
   follower,
-  praise
+  praise,
+  discuss
 }

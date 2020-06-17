@@ -2,18 +2,36 @@
   <div id="app">
     <router-view  />
     <zr-tabbar v-if="!(this.path === '/login' || this.path === '/register')" />
+    <van-popup :value="talkShow" position="bottom" :style="{ height: `${talkHeight}vw` }" @click-overlay="closeTalk">
+        <zr-talk />
+    </van-popup>
   </div>
 </template>
 <script>
 import zrTabbar from './components/common/tabbar'
+import { Popup } from 'vant'
+import zrTalk from './views/talk'
+import { mapState, mapMutations } from 'vuex'
 export default {
   data () {
     return {
       path: '',
-      flag: false
+      flag: false,
+      show: true
     }
   },
   computed: {
+    ...mapState({
+      talkHeight: state => state.blog.talkHeight
+    }),
+    talkShow: {
+      get () {
+        return this.$store.state.blog.talkShow
+      },
+      set (value) {
+        this.$store.state.blog.talkShow = value
+      }
+    }
   },
   mounted () {
     this.path = this.$route.path
@@ -24,8 +42,22 @@ export default {
       console.log(this.path)
     }
   },
+  methods: {
+    ...mapMutations(['setShowTalk']),
+    // 点击遮罩层
+    closeTalk () {
+      const data = {
+        talkShow: false,
+        talkHeight: 54,
+        emojiPicker: false
+      }
+      this.setShowTalk(data)
+    }
+  },
   components: {
-    zrTabbar
+    zrTabbar,
+    zrTalk,
+    [Popup.name]: Popup
   }
 }
 </script>

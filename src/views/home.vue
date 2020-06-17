@@ -9,7 +9,7 @@
     </div>
     <div  v-else class="contain">
       <div v-if="blogList.length >0">
-        <van-list v-model="isLoading"  :finished="finished"   finished-text="没有更多了"   @load="onLoad" >
+        <van-list :value="isLoading"  :finished="finished"   finished-text="没有更多了"   @load="onLoad" >
           <div v-for="(item,index) in blogList" :key="index" >
               <blog-item :blogItem="item" :userInfoClick="true" :blogInfoClick="true" :praiseClick="true" @addPraise="getList" ></blog-item>
           </div>
@@ -47,9 +47,16 @@ export default {
       count: state => state.blog.count,
       loading: state => state.blog.loading,
       pageIndex: state => state.blog.pageIndex,
-      finished: state => state.blog.finished,
-      isLoading: state => state.blog.isLoading
-    })
+      finished: state => state.blog.finished
+    }),
+    isLoading: {
+      get () {
+        return this.$store.state.blog.isLoading
+      },
+      set (value) {
+        this.$store.state.blog.isLoading = value
+      }
+    }
   },
   beforeCreate () {
     this.$store.dispatch('getList', {})

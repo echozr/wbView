@@ -24,7 +24,7 @@
           </ul>
       </div>
       <div class="tab_control" v-if="praiseClick">
-        <div class="tab_item">
+        <div class="tab_item" @click="toBolgInfo(blogItem.id)">
           <span class="iconfont">&#xe60e;</span>
           <b>{{blogItem.discusses}}</b>
         </div>
