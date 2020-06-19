@@ -16,7 +16,8 @@ export default {
     talkShow: false,
     talkHeight: 54,
     emojiPicker: false, // 表情框
-    discussList: {} // 评论列表
+    discussList: {}, // 评论列表
+    discussSonList: {}
   },
   getter: {
   },
@@ -51,8 +52,18 @@ export default {
     },
     setDiscuss: (state, data) => {
       state.discussList = data
+    },
+    setSonDiscuss: (state, data) => {
+      state.discussSonList = data
+    },
+    deleteSonDiscuss: (state, data) => {
+      const newArr = state.discussSonList.children.filter(v => {
+        if (v.id !== data) {
+          return true
+        }
+      })
+      state.discussSonList.children = newArr
     }
-
   },
   actions: {
     // 获取列表
@@ -82,6 +93,11 @@ export default {
           commit('setDiscuss', res.data.data)
         }
       })
+    },
+    deleteDiscussSon: ({ dispatch, commit }, data) => {
+      debugger
+      commit('deleteSonDiscuss', data.id)
+      dispatch('getDiscuss', { blogId: data.blogId })
     }
   }
 }

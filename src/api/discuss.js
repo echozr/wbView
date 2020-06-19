@@ -14,6 +14,18 @@ const discuss = {
   // 根据博客ID 获取评论列表
   getDiscussList (params) {
     return axios.post(`${base.api}/discuss/getDiscussList`, qs.stringify(params))
+  },
+  // 根据评论ID 删除评论
+  deleteDiscuss (params) {
+    return axios.post(`${base.api}/discuss/deleteDiscuss`, qs.stringify(params))
+  },
+  // 根据评论ID 删除单条评论
+  deleteOne (params) {
+    return axios.post(`${base.api}/discuss/deleteOne`, qs.stringify(params))
+  },
+  // 根据评论Id 获取评论字列表
+  getDiscussSon (params) {
+    return axios.post(`${base.api}/discuss/getDiscussListById`, qs.stringify(params))
   }
 }
 

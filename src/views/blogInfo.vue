@@ -8,7 +8,7 @@
         </div>
     </div>
     <div class="cont">
-        <blog-item :blogItem="blogItem" :userInfoClick="true"></blog-item>
+        <blog-item v-if="blogItem" :blogItem="blogItem" :userInfoClick="true"></blog-item>
         <van-tabs sticky v-model="active" :offset-top="45">
             <van-tab>
                 <div slot="title">评论 {{discussList.count}}</div>
@@ -35,18 +35,17 @@
                     </van-list>
                 </div>
             </van-tab>
-
         </van-tabs>
     </div>
-    <div class="tab_control">
-        <div class="tab_item" @click="doDiscuss(-1,blogItem.id)">
-            <span class="iconfont">&#xe60e;</span>
-            <b>评论</b>
-        </div>
-        <div class="tab_item" :class="{'active':blogItem.praisePerson}"  @click="doPraise">
-            <span class="iconfont">&#xe620;</span>
-            <b>点赞</b>
-        </div>
+    <div class="tab_control" >
+          <div class="tab_item" @click="doDiscuss(-1,blogItem.id)">
+              <span class="iconfont">&#xe60e;</span>
+              <b>评论</b>
+          </div>
+          <div class="tab_item" :class="{'active':blogItem.praisePerson}"  @click="doPraise">
+              <span class="iconfont">&#xe620;</span>
+              <b>点赞</b>
+          </div>
     </div>
     <zr-loading v-show="loading" />
 </div>
@@ -79,7 +78,8 @@ export default {
       },
       praiseList: [],
       active: 0,
-      loading: true
+      loading: true,
+      bottomHieght: 0
     }
   },
   computed: {
@@ -176,6 +176,8 @@ export default {
   background: #fff;
   z-index: 2;
   overflow-y: auto;
+  display: flex;
+  flex-direction:column;
   .InfoHeader {
     .header-fixed {
       z-index: 2;
@@ -210,8 +212,8 @@ export default {
     font-size: 4.5vw;
     color: #9e9e9e;
     border-top: 1px solid #eeeeee;
-    position: fixed;
-    bottom: 0;
+    margin-top: auto;
+    background: #ffffff;
     .tab_item {
       width: 50vw;
       height: 10vw;
@@ -237,6 +239,8 @@ export default {
     left: 0;
     right: 0;
     overflow: auto;
+    display: flex;
+    flex-direction: column;
   }
   .tit_warp{
     display: flex;

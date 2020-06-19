@@ -1,6 +1,6 @@
 <template>
   <div class="talk_container">
-     <div >
+    <div >
       <van-field ref="textArea"  class="editor" v-model="contentText" rows="5" autosize type="textarea" maxlength="500" placeholder="写评论..." show-word-limit  />
     </div>
     <div class="row btn_warp">
@@ -8,7 +8,7 @@
         <span class="iconfont" @click="showContact=true">&#xe60a;</span>
         <span class="iconfont" @click="showEmoji">&#xe68e;</span>
       </div>
-      <van-button round type="primary" size="small" @click="sendDiscuss">发送</van-button>
+      <van-button round type="primary" size="small" @click="sendDiscuss" :disabled='disabled'>发送</van-button>
     </div>
     <!-- 表情输入框 -->
     <VEmojiPicker v-show="emojiPicker" :showSearch="false" @select="selectEmoji" />
@@ -32,7 +32,8 @@ export default {
       contentText: '',
       atNumber: 0,
       contactList: [],
-      indexList: []
+      indexList: [],
+      disabled: false
     }
   },
   computed: {
@@ -46,7 +47,7 @@ export default {
   },
   methods: {
     ...mapMutations(['setShowTalk', 'setContent']),
-    ...mapActions(['getDiscuss']),
+    ...mapActions(['getDiscuss', 'getList']),
     // 显示表情窗口
     showEmoji () {
       this.setShowTalk({
@@ -81,17 +82,24 @@ export default {
     },
     // 点击评论
     async sendDiscuss () {
+      this.disabled = true
+      const content = localStorage.getItem('content')
       const parentId = Number(localStorage.getItem('parentId'))
       const blogId = Number(localStorage.getItem('discussBlogId'))
-      const { status, data } = await this.$axios.discuss.addDiscuss({ parentId, blogId, content: _tools.utf16toEntities(this.contentText) })
+      const { status, data } = await this.$axios.discuss.addDiscuss({ parentId, blogId, content: content + _tools.utf16toEntities(this.contentText) })
       if (status === 200 && data) {
         this.setShowTalk({
           emojiPicker: false,
           talkHeight: 54,
           talkShow: false
         })
+        localStorage.setItem('content', '')
         this.contentText = ''
         this.getDiscuss({ blogId })
+        this.getList()
+        setTimeout(() => {
+          this.disabled = false
+        }, 3000)
       } else {
         Notify({ type: 'success', message: data.message })
       }
