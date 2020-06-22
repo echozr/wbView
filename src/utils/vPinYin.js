@@ -5,7 +5,6 @@
 import { pinyin } from './pinyin.js'
 const vPinYin = {
   changeTo: function (data) {
-    debugger
     const pattern = new RegExp('[\u4E00-\u9FA5]+')
     const pattern2 = new RegExp('[A-Za-z]+')
     if (pattern.test(data)) {

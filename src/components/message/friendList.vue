@@ -60,10 +60,10 @@ export default {
       console.log(this.followId)
       const { status, data } = await this.$axios.follower.unFollow({ followerId: this.followId })
       if (status === 200 && data) {
-        Notify({ type: 'success', message: data.data })
+        Notify({ type: 'success', message: data.data, duration: 1000 })
         this.$emit('unFollow', this.followId)
       } else {
-        Notify({ type: 'success', message: '取消关注，请重试' })
+        Notify({ type: 'success', message: '取消关注，请重试', duration: 1000 })
       }
     },
     toUserInfo (user) {

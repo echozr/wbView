@@ -121,7 +121,7 @@ export default {
           debugger
           this.getDiscuss({ blogId: this.blogItem.blogId })
         } else {
-          Notify({ type: 'success', message: data.message })
+          Notify({ type: 'success', message: data.message, duration: 1000 })
         }
       }
     },
@@ -132,7 +132,7 @@ export default {
         this.showSonDis = true
         this.setSonDiscuss(data.data.list[0])
       } else {
-        Notify({ type: 'success', message: data.message })
+        Notify({ type: 'success', message: data.message, duration: 1000 })
       }
     },
     // 关闭评论详情页

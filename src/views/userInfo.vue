@@ -16,7 +16,7 @@
           <van-list>
             <div v-if="blogs.length >0">
               <div v-for="(item,index) in blogs" :key="index">
-                <blog-item :blogItem="item"></blog-item>
+                <blog-item :blogItem="item" :blogInfoClick='true'></blog-item>
               </div>
             </div>
             <div v-else>
@@ -85,7 +85,7 @@ export default {
       if (status === 200 && data) {
         this.images = _tools.groupingData(data.data.list, 'time')
       } else {
-        Notify({ type: 'success', message: data.message })
+        Notify({ type: 'success', message: data.message, duration: 1000 })
       }
     },
     // 根据用户信息获取关注数量和粉丝
@@ -95,7 +95,7 @@ export default {
         this.fans = data.data.fansCount
         this.follower = data.data.followerCount
       } else {
-        Notify({ type: 'success', message: data.message })
+        Notify({ type: 'success', message: data.message, duration: 1000 })
       }
     },
     // 获取用户信息
@@ -104,7 +104,7 @@ export default {
       if (status === 200 && data) {
         this.currentUser = data.data
       } else {
-        Notify({ type: 'success', message: data.message })
+        Notify({ type: 'success', message: data.message, duration: 1000 })
       }
     },
     // 获取博客（待完善下拉加载功能）
@@ -114,7 +114,7 @@ export default {
       if (status === 200 && data) {
         this.blogs = data.data.blogList
       } else {
-        Notify({ type: 'success', message: data.message })
+        Notify({ type: 'success', message: data.message, duration: 1000 })
       }
     },
     // 点击关注获取消关注，重新获取粉丝数量

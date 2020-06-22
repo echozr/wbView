@@ -90,7 +90,7 @@ export default {
           this.isLoad = false
           this.deleteDiscussSon({ id: this.discussItem.id, blogId: this.discussItem.blogId })
         } else {
-          Notify({ type: 'success', message: data.message })
+          Notify({ type: 'success', message: data.message, duration: 1000 })
         }
       }
     },

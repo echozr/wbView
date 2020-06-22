@@ -47,7 +47,7 @@ export default {
         console.log(data)
         this.getFollowList(data.data.userList)
       } else {
-        Notify({ type: 'success', message: data.data })
+        Notify({ type: 'success', message: data.data, duration: 1000 })
       }
     },
     async getFans () {
@@ -56,7 +56,7 @@ export default {
         console.log(data)
         this.getFansList(data.data.userList)
       } else {
-        Notify({ type: 'success', message: data.data })
+        Notify({ type: 'success', message: data.data, duration: 1000 })
       }
     },
     Follow () {

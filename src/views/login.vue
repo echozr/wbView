@@ -113,7 +113,7 @@ export default {
             this.setLogin({ flag: true, userInfo: data.data.userInfo })
             this.$router.push({ path: '/' })
           } else {
-            Notify({ type: 'success', message: data.message })
+            Notify({ type: 'success', message: data.message, duration: 1000 })
           }
         }
       }

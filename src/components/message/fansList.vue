@@ -67,15 +67,15 @@ export default {
       if (item.name === '确认取消关注') {
         const { status, data } = await this.$axios.follower.unFollow({ followerId: this.followId })
         if (status === 200 && data) {
-          Notify({ type: 'success', message: data.data })
+          Notify({ type: 'success', message: data.data, duration: 1000 })
           this.$emit('addFollower', this.followId)
         } else {
-          Notify({ type: 'success', message: data.message })
+          Notify({ type: 'success', message: data.message, duration: 1000 })
         }
       } else { // 添加关注
         const { status, data } = await this.$axios.follower.addFollow({ followerId: this.followId })
         if (status === 200 && data) {
-          Notify({ type: 'success', message: '关注成功' })
+          Notify({ type: 'success', message: '关注成功', duration: 1000 })
           this.$emit('addFollower', this.followId)
         } else {
           // Notify({ type: 'success', message: data.message })

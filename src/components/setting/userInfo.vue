@@ -121,7 +121,7 @@ export default {
         if (data.code === 200) {
           this.user.picture = data.data.url
         } else {
-          Notify({ type: 'success', message: data.message })
+          Notify({ type: 'success', message: data.message, duration: 1000 })
         }
       }
     },
@@ -136,9 +136,9 @@ export default {
         if (data.code === 200) {
           localStorage.setItem('userInfo', JSON.stringify(this.user))
           this.isEdit = false
-          Notify({ type: 'success', message: data.data })
+          Notify({ type: 'success', message: data.data, duration: 1000 })
         } else {
-          Notify({ type: 'success', message: data.message })
+          Notify({ type: 'success', message: data.message, duration: 1000 })
         }
       }
     }

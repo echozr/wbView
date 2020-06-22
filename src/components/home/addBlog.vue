@@ -69,12 +69,11 @@ export default {
           this.imageARR.push(data.data.url)
           console.log(this.imageARR)
         } else {
-          Notify({ type: 'error', message: ' 添加图片失败 ' })
+          Notify({ type: 'error', message: ' 添加图片失败 ', duration: 1000 })
         }
       }
     },
     save () {
-      debugger
       this.disabled = true
       this.loading = true
       setTimeout(() => {
@@ -86,6 +85,7 @@ export default {
       this.content = ''
       this.fileList = []
       this.imageARR = []
+      this.emojiPicker = false
     },
     // 保存方法
     async creatBlod () {
@@ -95,7 +95,7 @@ export default {
       })
       if (status === 200 && data) {
         if (data.code === 200) {
-          Notify({ type: 'success', message: ' 发布成功！ ' })
+          Notify({ type: 'success', message: ' 发布成功！ ', duration: 1000 })
           const blog = data.data
           const item = {
             id: blog.id,
@@ -109,9 +109,9 @@ export default {
             this.disabled = false
             this.claerCont()
             this.$emit('addBlog', { popStaue: false })
-          }, 3000)
+          }, 1000)
         } else {
-          Notify({ type: 'success', message: ' 发布失败 ' })
+          Notify({ type: 'success', message: ' 发布失败 ', duration: 1000 })
         }
       }
     },
@@ -158,7 +158,7 @@ export default {
         this.indexList = pyArray
         this.contactList = newList
       } else {
-        Notify({ type: 'success', message: data.data })
+        Notify({ type: 'success', message: data.data, duration: 1000 })
       }
     }
   },
@@ -199,5 +199,23 @@ export default {
       }
     }
   }
+}
+.btn_warp{
+  height: 12vw;
+  justify-content: space-between;
+  padding: 0 15px;
+  background: #eee;
+  align-items: center;
+  .icon_warp{
+    .iconfont{
+      font-size: 7.5vw;
+      margin: 0 10px;
+      color: #666666;
+    }
+  }
+}
+
+#EmojiPicker {
+  width:100vw!important;
 }
 </style>

@@ -22,6 +22,10 @@ const blog = {
   // 根据blogId获取微博
   getBlogItem (params) {
     return axios.post(`${base.api}/blog/getBlogInfo`, qs.stringify(params))
+  },
+  // 根据微博ID删除微博
+  deleteBlog (params) {
+    return axios.post(`${base.api}/blog/deleteBlog`, qs.stringify(params))
   }
 }
 

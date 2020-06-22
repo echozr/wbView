@@ -120,9 +120,9 @@ export default {
         this.loading = false
         if (status === 200 && data) {
           if (data.code === 200) {
-            Notify({ type: 'success', message: data.data })
+            Notify({ type: 'success', message: data.data, duration: 1000 })
           } else {
-            Notify({ type: 'success', message: data.message })
+            Notify({ type: 'success', message: data.message, duration: 1000 })
           }
         }
       }

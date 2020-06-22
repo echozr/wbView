@@ -102,7 +102,7 @@ export default {
           this.disabled = false
         }, 3000)
       } else {
-        Notify({ type: 'success', message: data.message })
+        Notify({ type: 'success', message: data.message, duration: 1000 })
       }
     },
     // 获取关注人列表
@@ -126,7 +126,7 @@ export default {
         this.indexList = pyArray
         this.contactList = newList
       } else {
-        Notify({ type: 'success', message: data.data })
+        Notify({ type: 'success', message: data.data, duration: 1000 })
       }
     }
   },

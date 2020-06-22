@@ -96,14 +96,14 @@ export default {
         if (status === 200 && data) {
           this.$emit('addPraise')
         } else {
-          Notify({ type: 'success', message: data.message })
+          Notify({ type: 'success', message: data.message, duration: 1000 })
         }
       } else { // 点赞
         const { status, data } = await this.$axios.praise.addPraise(params)
         if (status === 200 && data) {
           this.$emit('addPraise')
         } else {
-          Notify({ type: 'success', message: data.message })
+          Notify({ type: 'success', message: data.message, duration: 1000 })
         }
       }
     }

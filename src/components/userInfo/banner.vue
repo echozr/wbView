@@ -76,7 +76,7 @@ export default {
         if (status === 200 && data) {
           this.isFollow = data.data === 1
         } else {
-          Notify({ type: 'success', message: 'chengg' })
+          Notify({ type: 'success', message: 'chengg', duration: 1000 })
         }
       }
     },
@@ -86,20 +86,20 @@ export default {
       if (item.name === '确认取消关注') {
         const { status, data } = await this.$axios.follower.unFollow({ followerId: this.followId })
         if (status === 200 && data) {
-          Notify({ type: 'success', message: data.data })
+          Notify({ type: 'success', message: data.data, duration: 1000 })
           this.isFollow = false
           this.$emit('Follower')
         } else {
-          Notify({ type: 'success', message: data.message })
+          Notify({ type: 'success', message: data.message, duration: 1000 })
         }
       } else { // 添加关注
         const { status, data } = await this.$axios.follower.addFollow({ followerId: this.followId })
         if (status === 200 && data) {
-          Notify({ type: 'success', message: '关注成功' })
+          Notify({ type: 'success', message: '关注成功', duration: 1000 })
           this.isFollow = true
           this.$emit('Follower')
         } else {
-          Notify({ type: 'success', message: data.message })
+          Notify({ type: 'success', message: data.message, duration: 1000 })
         }
       }
     }

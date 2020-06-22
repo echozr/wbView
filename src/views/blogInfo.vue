@@ -6,6 +6,7 @@
                 <div class="iconfont header-fixed-back">&#xe609;</div>
             </router-link>微博正文
         </div>
+        <span v-if="myShow" class="more iconfont" @click="show=true">&#xe602;</span>
     </div>
     <div class="cont">
         <blog-item v-if="blogItem" :blogItem="blogItem" :userInfoClick="true"></blog-item>
@@ -47,6 +48,8 @@
               <b>点赞</b>
           </div>
     </div>
+    <!-- 回复删除action -->
+    <van-action-sheet v-model="show" get-container="#app" :actions="actions" :round="false" cancel-text="取消" close-on-click-action @cancel="show = false" @select="onChange"/>
     <zr-loading v-show="loading" />
 </div>
 </template>
@@ -54,7 +57,7 @@
 import blogItem from '../components/common/bolgItem'
 import DiscussList from '../components/blogInfo/discussList'
 import praiseList from '../components/blogInfo/praiseList'
-import { Image as VanImage, Tab, Tabs, List, Empty, Notify } from 'vant'
+import { Image as VanImage, Tab, Tabs, List, Empty, Notify, ActionSheet } from 'vant'
 import { mapActions, mapMutations, mapState } from 'vuex'
 export default {
   name: 'blogInfo',
@@ -76,6 +79,8 @@ export default {
           userName: ''
         }
       },
+      show: false,
+      actions: [{ name: '确认删除', color: 'red' }],
       praiseList: [],
       active: 0,
       loading: true,
@@ -85,7 +90,12 @@ export default {
   computed: {
     ...mapState({
       discussList: state => state.blog.discussList
-    })
+    }),
+    myShow () {
+      const myself = this.blogItem.user.userName
+      const loginSelf = JSON.parse(localStorage.getItem('userInfo')).userName
+      return myself === loginSelf
+    }
   },
   mounted () {
     this.getPraiseList()
@@ -104,7 +114,7 @@ export default {
         this.blogItem = data.data
         this.loading = false
       } else {
-        Notify({ type: 'success', message: '获取详情失败' })
+        Notify({ type: 'success', message: '获取详情失败', duration: 1000 })
       }
     },
     // 根据博客ID获取点赞列表
@@ -113,7 +123,7 @@ export default {
       if (status === 200 && data) {
         this.praiseList = data.data.list
       } else {
-        Notify({ type: 'success', message: '获取信息失败' })
+        Notify({ type: 'success', message: '获取信息失败', duration: 1000 })
       }
     },
     // 点赞获取消
@@ -129,7 +139,7 @@ export default {
           this.getPraiseList()
           this.getList()
         } else {
-          Notify({ type: 'success', message: data.message })
+          Notify({ type: 'success', message: data.message, duration: 1000 })
         }
       } else { // 点赞
         const { status, data } = await this.$axios.praise.addPraise(params)
@@ -138,7 +148,7 @@ export default {
           this.getPraiseList()
           this.getList()
         } else {
-          Notify({ type: 'success', message: data.message })
+          Notify({ type: 'success', message: data.message, duration: 1000 })
         }
       }
     },
@@ -152,6 +162,22 @@ export default {
     // 点击子评论
     sonDiscuss (item) {
       this.doDiscuss(item.id, item.blogId)
+    },
+    async onChange (type) {
+      switch (type.name) {
+        case '确认删除':
+          // eslint-disable-next-line no-case-declarations
+          const { status, data } = await this.$axios.blog.deleteBlog({ blogId: this.blogItem.id })
+          if (status === 200 && data) {
+            this.getList()
+            setTimeout(() => {
+              this.$router.push({ path: '/' })
+            }, 1000)
+          }
+          break
+        default:
+          break
+      }
     }
   },
   components: {
@@ -162,7 +188,8 @@ export default {
     [Tab.name]: Tab,
     [Tabs.name]: Tabs,
     [List.name]: List,
-    [Empty.name]: Empty
+    [Empty.name]: Empty,
+    [ActionSheet.name]: ActionSheet
   }
 }
 </script>
@@ -250,5 +277,13 @@ export default {
         margin-right: 5px;
     }
   }
+}
+.more {
+  font-size: 7vw;
+  position: fixed;
+  right: 5vw;
+  top: 2vw;
+  z-index: 10000;
+  color: #666666;
 }
 </style>
