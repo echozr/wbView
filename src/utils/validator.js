@@ -1,3 +1,7 @@
+/**
+ * @description 全局验证规则
+ * @author zr
+ */
 import Vue from 'vue'
 import { ValidationProvider, extend, localize } from 'vee-validate'
 import { required, email } from 'vee-validate/dist/rules' // 验证规则导入

@@ -6,6 +6,7 @@ import api from './api' // 导入api接口
 import './utils/validator'
 import tools from './utils/tools'
 import 'amfe-flexible'
+import vFilter from './utils/vfilters' // 全局过滤方法
 import divider from './components/common/divider'
 import zrLoading from './components/common/loading'
 Vue.prototype.$axios = api // 将api挂载到vue的原型上
@@ -29,6 +30,11 @@ router.beforeEach((to, from, next) => {
   } else {
     next()
   }
+})
+
+// 全局过滤器注册
+Object.keys(vFilter).forEach(key => {
+  Vue.filter(key, vFilter[key])
 })
 
 router.afterEach(route => {

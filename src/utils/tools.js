@@ -55,14 +55,6 @@ const _tools = {
       }
     })
     return str
-  },
-  atReplace (str) {
-    // 正则表达式，匹配 '@昵称:userName'
-    const REG_FOR_AT_WHO = /@(.+?):(\w+?)\b/g
-    const result = str.replace(REG_FOR_AT_WHO, (matchStr, nickName, userName) => {
-      return `<a style="color:#2999cc" href="#/userInfo/:${userName}">@${nickName}</a>`
-    })
-    return result
   }
 }
 

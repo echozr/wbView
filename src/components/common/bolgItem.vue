@@ -12,11 +12,11 @@
         />
         <div class="userInfotext d-flex flex-column j-center">
           <b class="name">{{blogItem.user.nickname}}</b>
-          <span class="dis">{{blogItem.createdAt}}</span>
+          <span class="dis">{{blogItem.createdAt|changeTime}}</span>
         </div>
       </div>
       <div @click=" blogInfoClick && toBolgInfo(blogItem.id)">
-          <p class="blogContent">{{blogItem.content}}</p>
+          <p class="blogContent" v-html="$options.filters.atReplace(blogItem.content)"></p>
           <ul class="blogImgWarp row" v-if="blogItem.blogUploads.length>0">
               <li v-for="(item,index) in blogItem.blogUploads" :key="index">
                 <van-image width="29vw" height="29vw" Lazy-Load :src="item" @click.stop="HandleclickImg(index)" />

@@ -63,6 +63,12 @@ export default {
         }
       })
       state.discussSonList.children = newArr
+    },
+    addSonDiscuss: (state, data) => {
+      const { list, parentId } = data
+      const result = list.list.filter(v => v.id === parentId)
+      console.log(result)
+      state.discussSonList = result[0]
     }
   },
   actions: {
@@ -94,8 +100,15 @@ export default {
         }
       })
     },
+    addSonDiscuss: ({ commit }, data) => {
+      const { blogId, parentId } = data
+      return api.discuss.getDiscussList({ blogId }).then(res => {
+        if (res.data.code === 200) {
+          commit('addSonDiscuss', { list: res.data.data, parentId })
+        }
+      })
+    },
     deleteDiscussSon: ({ dispatch, commit }, data) => {
-      debugger
       commit('deleteSonDiscuss', data.id)
       dispatch('getDiscuss', { blogId: data.blogId })
     }

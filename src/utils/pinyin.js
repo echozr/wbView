@@ -1,3 +1,7 @@
+/**
+ * @description 汉字转拼音库
+ * @author zr
+ */
 export const pinyin = {
   a: '\u554a\u963f\u9515',
   ai: '\u57c3\u6328\u54ce\u5509\u54c0\u7691\u764c\u853c\u77ee\u827e\u788d\u7231\u9698\u8bf6\u6371\u55f3\u55cc\u5ad2\u7477\u66a7\u7839\u953f\u972d',

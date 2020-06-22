@@ -47,7 +47,7 @@ export default {
   },
   methods: {
     ...mapMutations(['setShowTalk', 'setContent']),
-    ...mapActions(['getDiscuss', 'getList']),
+    ...mapActions(['getDiscuss', 'getList', 'addSonDiscuss']),
     // 显示表情窗口
     showEmoji () {
       this.setShowTalk({
@@ -97,6 +97,7 @@ export default {
         this.contentText = ''
         this.getDiscuss({ blogId })
         this.getList()
+        this.addSonDiscuss({ blogId, parentId })
         setTimeout(() => {
           this.disabled = false
         }, 3000)

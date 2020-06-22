@@ -6,9 +6,22 @@
       <span  class="rightIcon"  ><button v-show ="content!=''" class="iconfont"  @click="save" :disabled='disabled' >&#xe61c;</button></span>
     </div>
     <div >
-      <van-field  class="editor" v-model="content" rows="5" autosize type="textarea" maxlength="500" placeholder="分享新鲜事..." show-word-limit />
+      <van-field  ref="textArea"  class="editor" v-model="content" rows="5" autosize type="textarea" maxlength="500" placeholder="分享新鲜事..." show-word-limit />
+    </div>
+    <div class="row btn_warp">
+      <div class="icon_warp">
+        <span class="iconfont" @click="showContact=true">&#xe60a;</span>
+        <span class="iconfont" @click="emojiPicker=!emojiPicker">&#xe68e;</span>
+      </div>
     </div>
     <divider/>
+    <!-- 表情输入框 -->
+    <VEmojiPicker v-show="emojiPicker" :showSearch="false" @select="selectEmoji" />
+    <!-- 联系人弹框 -->
+    <van-popup v-model="showContact" position="bottom" >
+      <zr-contact  @close="closeCont" :contactList="contactList" :indexList="indexList"  @atContact="atInfo" />
+    </van-popup>
+
     <div class="uploadWarp">
       <van-uploader v-model="fileList"   :max-count="9" :after-read="afterRead" @delete="delImg" />
     </div>
@@ -16,7 +29,11 @@
   </div>
 </template>
 <script>
-import { Uploader, Field, Button, Image as VanImage, Notify } from 'vant'
+import VEmojiPicker from 'v-emoji-picker'
+import zrContact from '../blogInfo/contact'
+import { Uploader, Field, Button, Image as VanImage, Notify, Popup } from 'vant'
+import vPinYin from '../../utils/vPinYin'
+import _tools from '../../utils/tools'
 import { mapActions } from 'vuex'
 export default {
   props: {
@@ -27,11 +44,16 @@ export default {
       loading: false,
       imageARR: [],
       fileList: [],
-      disabled: false
+      disabled: false,
+      emojiPicker: false,
+      showContact: false,
+      contactList: [],
+      indexList: []
     }
   },
   mounted () {
     this.claerCont()
+    this.getFollow()
   },
   methods: {
     ...mapActions(['createBlogAction']),
@@ -68,7 +90,7 @@ export default {
     // 保存方法
     async creatBlod () {
       const { status, data } = await this.$axios.blog.creatBlog({
-        content: this.content,
+        content: _tools.utf16toEntities(this.content),
         image: this.imageARR
       })
       if (status === 200 && data) {
@@ -101,13 +123,53 @@ export default {
         return v.indexOf(file.file.name) === -1
       })
       console.log(this.imageARR)
+    },
+    selectEmoji (emoji) {
+      this.content += emoji.data
+    },
+    // 关闭联系人面板
+    closeCont (data) {
+      this.showContact = data
+    },
+    // 点击联系人获取@信息
+    atInfo (data) {
+      this.showContact = false
+      this.$refs.textArea.focus()
+      this.content += data
+    },
+    // 获取关注人列表
+    async getFollow () {
+      const { status, data } = await this.$axios.follower.getFollower()
+      if (status === 200 && data) {
+        console.log(vPinYin)
+        const pyArray = data.data.userList.map(v => vPinYin.changeTo(v.nickname)).filter((value, index, self) => {
+          return self.indexOf(value) === index
+        })
+        const list = data.data.userList.map(v => {
+          v.title = vPinYin.changeTo(v.nickname)
+          return v
+        })
+        const newList = pyArray.map(v => {
+          const person = {}
+          person.title = v
+          person.list = list.filter(item => item.title === v)
+          return person
+        })
+        this.indexList = pyArray
+        this.contactList = newList
+      } else {
+        Notify({ type: 'success', message: data.data })
+      }
     }
   },
   components: {
     [Uploader.name]: Uploader,
     [VanImage.name]: VanImage,
     [Field.name]: Field,
-    [Button.name]: Button
+    [Button.name]: Button,
+    [Popup.name]: Popup,
+    VEmojiPicker,
+    zrContact
   }
 }
 </script>

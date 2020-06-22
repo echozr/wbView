@@ -11,8 +11,8 @@
           <img class="userImage" :src="list.user.picture"  />
           <div class="userInfotext">
             <p class="UserName">{{list.user.nickname}}</p>
-            <span class="time">{{list.createdAt}}</span>
-            <div class="cont" v-html="list.content"></div>
+            <span class="time">{{list.createdAt|changeTime}}</span>
+            <div class="cont" v-html="$options.filters.atReplace(list.content)"></div>
             <span class="back" @click="close">查看原微博</span>
           </div>
         </div>
@@ -22,16 +22,16 @@
           <img class="userImageSmall" :src="item.user.picture" />
           <div class="userInfotext bod">
             <p class="UserName">{{item.user.nickname}}</p>
-            <span class="time">{{item.createdAt}}</span>
-            <div class="cont" v-html="item.content"></div>
+            <span class="time">{{item.createdAt|changeTime}}</span>
+            <div class="cont" v-html="$options.filters.atReplace(item.content)"></div>
           </div>
         </div>
       </div>
     </div>
   <!-- 回复删除action -->
-  <van-action-sheet v-model="show" :actions="actions" :round="false" cancel-text="取消" close-on-click-action @cancel="show = false" @select="onChange"/>
+  <van-action-sheet v-model="show" get-container="#app" :actions="actions" :round="false" cancel-text="取消" close-on-click-action @cancel="show = false" @select="onChange"/>
   <!-- 确认删除 -->
-  <van-action-sheet v-model="deleteShow" :actions="deleteActions"  description="删除评论后，评论下的所有回复都会被删除" :round="false" cancel-text="取消" close-on-click-action @cancel="deleteShow = false" @select="deleteChange"/>
+  <van-action-sheet v-model="deleteShow"  get-container="#app" :actions="deleteActions"  description="删除评论后，评论下的所有回复都会被删除" :round="false" cancel-text="取消" close-on-click-action @cancel="deleteShow = false" @select="deleteChange"/>
   <zr-loading v-show="isLoad" />
   </div>
 </template>
@@ -71,6 +71,7 @@ export default {
           debugger
           this.text = `回复@${this.discussItem.user.userName}:${this.discussItem.user.nickname}`
           this.discussItem.content = this.text
+          console.log(this.discussItem)
           this.$emit('sonDiscussTalk', this.discussItem)
           break
         case '删除':
