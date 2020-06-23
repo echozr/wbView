@@ -9,7 +9,7 @@
     </div>
     <div  v-else class="contain">
       <div v-if="blogList.length >0">
-        <van-list :value="isLoading"  :finished="finished"   finished-text="没有更多了"   @load="onLoad" >
+        <van-list :value="isLoading"  :finished="finished"  offset="1"  finished-text="没有更多了"   @load="onLoad" >
           <div v-for="(item,index) in blogList" :key="index" >
               <blog-item :blogItem="item" :userInfoClick="true" :blogInfoClick="true" :praiseClick="true" @addPraise="getList" ></blog-item>
           </div>
@@ -79,10 +79,11 @@ export default {
         this.$store.state.blog.finished = true
       } else {
         this.$store.state.blog.isLoading = true
-        return this.loadMore({
+        this.loadMore({
           pagesize: this.pagesize,
           pageIndex: this.pageIndex
         })
+        return true
       }
     }
   },

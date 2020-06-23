@@ -83,7 +83,7 @@ export default {
     // 点击评论
     async sendDiscuss () {
       this.disabled = true
-      const content = localStorage.getItem('content')
+      const content = localStorage.getItem('content') === null ? '' : localStorage.getItem('content')
       const parentId = Number(localStorage.getItem('parentId'))
       const blogId = Number(localStorage.getItem('discussBlogId'))
       const { status, data } = await this.$axios.discuss.addDiscuss({ parentId, blogId, content: content + _tools.utf16toEntities(this.contentText) })
