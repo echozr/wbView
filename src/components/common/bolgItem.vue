@@ -40,6 +40,7 @@
 <script>
 // eslint-disable-next-line no-unused-vars
 import { Image as VanImage, Lazyload, ImagePreview, Notify } from 'vant'
+import { mapActions } from 'vuex'
 export default {
   props: {
     blogItem: {
@@ -60,6 +61,10 @@ export default {
     praiseClick: {
       type: Boolean,
       default: false
+    },
+    isRead: {
+      type: Boolean,
+      default: false
     }
   },
   data () {
@@ -68,6 +73,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['getAtAllCount']),
     // 查看图片
     HandleclickImg (index) {
       ImagePreview({
@@ -81,9 +87,17 @@ export default {
       this.$router.push({ path: `/userInfo/:${user.userName}` })
     },
     // 跳转到博客详情
-    toBolgInfo (blogId) {
-      console.log(blogId)
-      this.$router.push({ path: `/blogInfo/:${blogId}` })
+    async toBolgInfo (blogId) {
+      if (this.isRead) {
+        const { status } = await this.$axios.util.changeRead({ blogId })
+        if (status === 200 || status === 204) {
+          this.getAtAllCount()
+          console.log(1)
+          // this.$router.push({ path: `/blogInfo/:${blogId}` })
+        }
+      } else {
+        this.$router.push({ path: `/blogInfo/:${blogId}` })
+      }
     },
     // 点赞获取消
     async doPraise (type) {

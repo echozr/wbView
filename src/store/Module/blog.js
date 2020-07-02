@@ -17,7 +17,10 @@ export default {
     talkHeight: 54,
     emojiPicker: false, // 表情框
     discussList: {}, // 评论列表
-    discussSonList: {}
+    discussSonList: {},
+    atAllCount: null,
+    atBlog: null,
+    atDiscuss: null
   },
   getter: {
   },
@@ -69,6 +72,11 @@ export default {
       const result = list.list.filter(v => v.id === parentId)
       console.log(result)
       state.discussSonList = result[0]
+    },
+    setAtAllCount: (state, data) => {
+      state.atAllCount = data.total
+      state.atDiscuss = data.discuss
+      state.atBlog = data.blog
     }
   },
   actions: {
@@ -111,6 +119,14 @@ export default {
     deleteDiscussSon: ({ dispatch, commit }, data) => {
       commit('deleteSonDiscuss', data.id)
       dispatch('getDiscuss', { blogId: data.blogId })
+    },
+    // 获取At总数
+    getAtAllCount: ({ commit }) => {
+      return api.util.getAllAtCount().then(res => {
+        if (res.data.code === 200) {
+          commit('setAtAllCount', res.data.data)
+        }
+      })
     }
   }
 }

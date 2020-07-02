@@ -51,7 +51,12 @@ const routes = [
   {
     path: '/message',
     name: 'message',
-    component: () => import(/* webpackChunkName: "resetPassword" */ '../views/message.vue')
+    component: () => import(/* webpackChunkName: "message" */ '../views/message.vue')
+  },
+  {
+    path: '/atMe',
+    name: 'atMe',
+    component: () => import(/* webpackChunkName: "atMe" */ '../views/atMe.vue')
   },
   {
     path: '/error',

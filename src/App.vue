@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <router-view  />
-    <zr-tabbar v-if="!(this.path === '/login' || this.path === '/register')" />
+    <zr-tabbar v-if="!(this.path === '/login' || this.path === '/register')"  :count='atAllCount'/>
     <van-popup :value="talkShow" position="bottom" :style="{ height: `${talkHeight}vw` }" @click-overlay="closeTalk">
         <zr-talk />
     </van-popup>
@@ -11,7 +11,7 @@
 import zrTabbar from './components/common/tabbar'
 import { Popup } from 'vant'
 import zrTalk from './views/talk'
-import { mapState, mapMutations } from 'vuex'
+import { mapState, mapMutations, mapActions } from 'vuex'
 export default {
   data () {
     return {
@@ -20,9 +20,13 @@ export default {
       show: true
     }
   },
+  beforeCreate () {
+    this.$store.dispatch('getAtAllCount', {})
+  },
   computed: {
     ...mapState({
-      talkHeight: state => state.blog.talkHeight
+      talkHeight: state => state.blog.talkHeight,
+      atAllCount: state => state.blog.atAllCount
     }),
     talkShow: {
       get () {
@@ -43,6 +47,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['getAtAllCount']),
     ...mapMutations(['setShowTalk']),
     // 点击遮罩层
     closeTalk () {
