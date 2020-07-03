@@ -1,31 +1,31 @@
 <template>
   <div>
     <div class="flex-column discussItem">
-      <div class="userCont row"  @click="toUserInfo(discussItem.discuss.user)">
+      <div class="userCont row"  @click="toUserInfo(discussItem.user)">
         <van-image
           round
           width="15vw"
           height="15vw"
           Lazy-Load
-          :src="discussItem.discuss.user.picture"
+          :src="discussItem.user.picture"
           class="userImage"
         />
         <div class="userInfotext d-flex flex-column j-center">
-          <b class="name">{{discussItem.discuss.user.nickname}}</b>
-          <span class="dis">{{discussItem.discuss.createdAt | changeTime}}</span>
+          <b class="name">{{discussItem.user.nickname}}</b>
+          <span class="dis">{{discussItem.createdAt | changeTime}}</span>
         </div>
-        <span class="reTalk" @click.stop="toBolgInfo(discussItem.blogId,discussItem.discussId)">回复</span>
+        <span class="reTalk" @click.stop="toBolgInfo(discussItem.atRelations[0].blogId,discussItem.atRelations[0].discussId)">回复</span>
       </div>
-      <div class="content"  @click="toBolgInfo(discussItem.blogId,discussItem.discussId)">
-        回复:<p v-html="$options.filters.atReplace(discussItem.discuss.content)"></p>
+      <div class="content"  @click="toBolgInfo(discussItem.atRelations[0].blogId,discussItem.atRelations[0].discussId)">
+        回复:<p v-html="$options.filters.atReplace(discussItem.content)"></p>
       </div>
     </div>
-    <div class="blogWarp"  @click="toBolgInfo(discussItem.blogId,discussItem.discussId)">
+    <div class="blogWarp"  @click="toBolgInfo(discussItem.atRelations[0].blogId,discussItem.atRelations[0].discussId)">
       <div class="blogItem row">
-        <img class="img" :src="discussItem.blog.user.picture" />
+        <img class="img" :src="discussItem.atRelations[0].blog.user.picture" />
         <div class="userInfotext d-flex flex-column">
-          <div class="name">{{discussItem.blog.user.nickname}}</div>
-          <div class="text" v-html="$options.filters.atReplace(discussItem.blog.content)"></div>
+          <div class="name">{{discussItem.atRelations[0].blog.user.nickname}}</div>
+          <div class="text" v-html="$options.filters.atReplace(discussItem.atRelations[0].blog.content)"></div>
         </div>
       </div>
     </div>
@@ -34,7 +34,6 @@
 </template>
 <script>
 import { Image as VanImage } from 'vant'
-import { mapActions } from 'vuex'
 export default {
   props: {
     discussItem: {
@@ -45,7 +44,6 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['getAtAllCount']),
     // 跳转到用户详情
     toUserInfo (user) {
       this.$router.push({ path: `/userInfo/:${user.userName}` })
@@ -92,6 +90,9 @@ export default {
     margin: 2vw;
     font-size: 4.3vw;
     color: #1b1a1a;
+    p{
+      display: inline-block;
+    }
   }
 
 }

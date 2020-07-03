@@ -17,7 +17,7 @@
     <div class="sliding-validation-top">
       <p>请完成安全验证</p>
       <i class="iconfont" @click="handleReload()">&#xe68c;</i>
-      <!-- <i class="iconfont" @click="handleClose()">&#xe607;</i> -->
+      <i class="iconfont" @click="handleClose()">&#xe607;</i>
     </div>
     <div
       class="sliding-validation-image-wrapper"
@@ -177,6 +177,7 @@ export default {
     },
     // 初始化图片
     initImage () {
+      debugger
       const img = this.createImage(() => {
         this.blockX = this.genRandom(100, 200)
         const y = this.genRandom(20, 80)
@@ -302,14 +303,16 @@ export default {
     mouseupFun () {
       // 拼图是否正确
       if (Math.abs(this.width - 40 - this.blockX) < 3) {
+        debugger
         this.successTime = parseFloat(
           ((new Date() - this.beginDate) / 1000).toFixed(3)
         )
         this.statusClass = 'sliding-validation-block-success'
         this.success = true
+        this.handleClose()
         setTimeout(() => {
           this.success = false
-          this.handleClose(true)
+          this.handleClose()
           this.statusClass = ''
           this.width = 40
           this.blockDom.style.left = 0 + 'px'
@@ -351,7 +354,11 @@ export default {
     },
     // 关闭验证码
     handleClose () {
-      this.$emit('handleSlidingValidation', { type: false, msg: '验证成功' })
+      if (this.success) {
+        this.$emit('handleSlidingValidation', { type: false, msg: '验证成功' })
+      } else {
+        this.$emit('handleSlidingValidation', { type: false, msg: '验证失败' })
+      }
       return false
     }
   }

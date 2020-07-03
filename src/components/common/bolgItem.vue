@@ -90,10 +90,10 @@ export default {
     async toBolgInfo (blogId) {
       if (this.isRead) {
         const { status } = await this.$axios.util.changeRead({ blogId })
-        if (status === 200 || status === 204) {
+        if (status === 200) {
           this.getAtAllCount()
           console.log(1)
-          // this.$router.push({ path: `/blogInfo/:${blogId}` })
+          this.$router.push({ path: `/blogInfo/:${blogId}` })
         }
       } else {
         this.$router.push({ path: `/blogInfo/:${blogId}` })

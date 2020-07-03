@@ -37,7 +37,7 @@
         </ValidationProvider>
         <div class='select_warp'>
           <span class="lable">性别</span>
-          <van-dropdown-menu>
+          <van-dropdown-menu overlay="false">
             <van-dropdown-item v-model="user.gender" :options="option1" />
           </van-dropdown-menu>
         </div>
@@ -125,14 +125,21 @@ export default {
             Notify({ type: 'success', message: data.message, duration: 1000 })
           }
         }
+      } else {
+        this.showSlidingValidation = type
       }
     }
   }
 }
 </script>
 
-<style lang="less" >
+<style lang="less" scope >
 @import url("../assets/css/login.less");
+.van-dropdown-menu__bar{
+  height: 10vw;
+  background-color:none;
+  box-shadow:none;
+}
 .select_warp{
     width: 100%;
     height: 10vw;

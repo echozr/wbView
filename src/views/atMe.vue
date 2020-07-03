@@ -33,7 +33,7 @@ import zrHeader from '../components/common/header'
 import blogItem from '../components/common/bolgItem'
 import atDiscuss from '../components/common/atDiscuss'
 import { Tab, Tabs, Notify, Empty } from 'vant'
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 export default {
   name: 'atMe',
   data () {
@@ -55,6 +55,7 @@ export default {
     this.getDiscuss()
   },
   methods: {
+    ...mapActions(['getAtAllCount']),
     async getAtBlog () {
       const { status, data } = await this.$axios.util.getAtBlog()
       this.loading = false
@@ -75,10 +76,10 @@ export default {
     },
     async changeData ({ blogId, discussId }) {
       const { status } = await this.$axios.util.changeRead({ blogId, discussId })
-      if (status === 200 || status === 204) {
-        // this.getAtAllCount()
-        console.log(1)
-        // this.$router.push({ path: `/blogInfo/:${blogId}` })
+      console.log(status)
+      if (status === 200) {
+        this.getAtAllCount()
+        this.$router.push({ path: `/blogInfo/:${blogId}` })
       }
     }
   },

@@ -76,8 +76,8 @@ export default {
   data () {
     return {
       user: {
-        userName: 'fanruoruo',
-        password: 'Aa123456'
+        userName: '',
+        password: ''
       },
       loading: false,
       showSlidingValidation: false,
@@ -116,6 +116,8 @@ export default {
             Notify({ type: 'success', message: data.message, duration: 1000 })
           }
         }
+      } else {
+        this.showSlidingValidation = type
       }
     }
   }
